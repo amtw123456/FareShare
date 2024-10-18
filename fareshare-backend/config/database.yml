@@ -84,3 +84,4 @@ production:
   database: fareshare
   username: fareshare_backend
   password: <%= ENV["FARESHARE_BACKEND_DATABASE_PASSWORD"] %>
+
