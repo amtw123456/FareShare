@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :transaction_related_users
   resources :transaction_entries
   resources :users, except: [:create]
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
