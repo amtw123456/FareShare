@@ -14,7 +14,7 @@ class UsersController < ApplicationController
   end
 
   # POST /users
-  def create
+  def register
     Rails.logger.info("Creating a new user with params: #{user_params}")
     @user = User.new(user_params)
 
@@ -24,6 +24,16 @@ class UsersController < ApplicationController
     else
       Rails.logger.error("Failed to create user: #{@user.errors.full_messages}")
       render json: @user.errors, status: :unprocessable_entity
+    end
+  end
+
+  def login
+    user = User.find_by(email: user_params[:email])  # Find user by email
+
+    if user && user.authenticate(user_params[:password])  # Check if password is correct
+      render json: { message: "Password is correct." }, status: :ok
+    else
+      render json: { error: "Invalid email or password." }, status: :unauthorized
     end
   end
 
