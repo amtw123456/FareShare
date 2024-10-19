@@ -13,6 +13,16 @@ class UsersController < ApplicationController
     render json: @user
   end
 
+  def search
+    if params[:query].present?
+      search_term = "%#{params[:query]}%"
+      @users = User.where("email LIKE ?", search_term)
+      render json: @users
+    else
+      render json: { error: "Search query is missing" }, status: :unprocessable_entity
+    end
+  end
+
   # POST /users
   def register
     Rails.logger.info("Creating a new user with params: #{user_params}")
