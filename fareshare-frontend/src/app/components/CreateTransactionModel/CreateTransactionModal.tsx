@@ -1,60 +1,59 @@
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Checkbox, Input, Link } from "@nextui-org/react";
-import { MailIcon } from './base/MailIcon.jsx';
-import { LockIcon } from './base/LockIcon.jsx';
+import {
+    Modal,
+    ModalContent,
+    ModalHeader,
+    ModalBody,
+    ModalFooter,
+    Button,
+    useDisclosure,
+    Input,
+    Select,
+    Textarea,
+} from "@nextui-org/react";
+
+import DynamicFields from "./DynamicFields";
 
 export default function CreateTransactionModal() {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
     return (
         <>
-            <Button onPress={onOpen} color="primary">Open Modal</Button>
-            <Modal
-                isOpen={isOpen}
-                onOpenChange={onOpenChange}
-                placement="top-center"
-            >
+            <Button onPress={onOpen} color="primary">
+                Create Transaction
+            </Button>
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center">
                 <ModalContent>
                     {(onClose) => (
                         <>
-                            <ModalHeader className="flex flex-col gap-1">Log in</ModalHeader>
+                            <ModalHeader className="flex flex-col gap-1">
+                                Create a Transaction Entry
+                            </ModalHeader>
                             <ModalBody>
                                 <Input
-                                    autoFocus
-                                    endContent={
-                                        <MailIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-                                    }
-                                    label="Email"
-                                    placeholder="Enter your email"
+                                    placeholder="Enter your transaction entry title"
                                     variant="bordered"
+                                />
+                                <Textarea
+                                    variant="bordered"
+                                    labelPlacement="outside"
+                                    placeholder="Enter your transaction entry description"
+                                    defaultValue=""
+                                    className="max-w"
                                 />
                                 <Input
-                                    endContent={
-                                        <LockIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-                                    }
-                                    label="Password"
-                                    placeholder="Enter your password"
-                                    type="password"
+                                    placeholder="Enter your transaction entry amount"
                                     variant="bordered"
                                 />
-                                <div className="flex py-2 px-1 justify-between">
-                                    <Checkbox
-                                        classNames={{
-                                            label: "text-small",
-                                        }}
-                                    >
-                                        Remember me
-                                    </Checkbox>
-                                    <Link color="primary" href="#" size="sm">
-                                        Forgot password?
-                                    </Link>
-                                </div>
+
+                                {/* Dropdown for selecting a category or type of transaction */}
+                                <DynamicFields />
                             </ModalBody>
                             <ModalFooter>
                                 <Button color="danger" variant="flat" onPress={onClose}>
                                     Close
                                 </Button>
                                 <Button color="primary" onPress={onClose}>
-                                    Sign in
+                                    Create
                                 </Button>
                             </ModalFooter>
                         </>
