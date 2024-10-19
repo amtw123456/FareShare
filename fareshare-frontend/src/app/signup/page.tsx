@@ -1,21 +1,49 @@
 "use client"
 
 import { useState, ChangeEvent, FormEvent } from 'react';
+import axios from 'axios';
 
 interface User {
+    first_name: string;
+    last_name: string;
+    user_name: string;
     email: string;
     password: string;
 }
 
 const Signup = () => {
-    const [user, setUser] = useState<User>({ email: '', password: '' });
+    const [user, setUser] = useState<User>({ email: '', password: '', first_name: '', last_name: '', user_name: '' });
     const [showPassword, setShowPassword] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         setUser({ ...user, [e.target.name]: e.target.value });
     };
 
+    const handleRegister = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault(); // Prevent the default form submission behavior
+        console.log(user)
+        try {
+            const response = await axios.post('http://localhost:3000/register', {
+                user: {  // Wrap the email and password in a user object
+                    first_name: user.first_name,
+                    last_name: user.last_name,
+                    user_name: user.user_name,
+                    email: user.email,
+                    password: user.password,
+                }
+            });
 
+            // Handle successful login here (e.g., save token, redirect user)
+            console.log('Login successful:', response.data);
+        } catch (err) {
+            if (axios.isAxiosError(err) && err.response) {
+                setError(err.response.data.error || 'Login failed');
+            } else {
+                setError('An unexpected error occurred');
+            }
+        }
+    };
 
     return (
         <div className="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
@@ -37,14 +65,41 @@ const Signup = () => {
                                 </div>
                             </div>
 
-                            <form onSubmit={() => (console.log('red'))} className="mx-auto max-w-xs">
+                            <form onSubmit={handleRegister} className="mx-auto max-w-xs">
+                                <div className='flex flex-row space-x-4'>
+                                    <input
+                                        name="first_name"
+                                        onChange={handleInputChange}
+                                        value={user.first_name}
+                                        className="w-1/2 px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+                                        type="text" placeholder="First name" required
+                                    />
+
+                                    <input
+                                        name="last_name"
+                                        onChange={handleInputChange}
+                                        value={user.last_name}
+                                        className="w-1/2 px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+                                        type="text" placeholder="Last name" required
+                                    />
+                                </div>
+
+                                <input
+                                    name="user_name"
+                                    onChange={handleInputChange}
+                                    value={user.user_name}
+                                    className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+                                    type="text" placeholder="Username" required
+                                />
+
                                 <input
                                     name="email"
                                     onChange={handleInputChange}
                                     value={user.email}
-                                    className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                                    className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
                                     type="email" placeholder="Email" required
                                 />
+
                                 <input
                                     name="password"
                                     onChange={handleInputChange}
