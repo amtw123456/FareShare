@@ -19,10 +19,10 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save
-      Rails.logger.info("User created successfully: #{@user.inspect}")
+      Rails.logger.info("User registered successfully: #{@user.inspect}")
       render json: @user, status: :created, location: @user
     else
-      Rails.logger.error("Failed to create user: #{@user.errors.full_messages}")
+      Rails.logger.error("Failed to register user: #{@user.errors.full_messages}")
       render json: @user.errors, status: :unprocessable_entity
     end
   end
