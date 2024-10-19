@@ -1,2 +1,3 @@
 rails generate scaffold User first_name:string last_name:string user_name:string:uniq email:string:uniq password_digest:string
-rails generate scaffold transaction amount:decimal title:string  description:string user:references
+rails generate scaffold transaction_entry amount:decimal title:string  description:string user:references
+rails destroy scaffold transaction
