@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { Button, Input } from "@nextui-org/react";
 import { XIcon } from './base/XIcon';
 
+import TaggingComponent from "./TaggingComponent";
+
 interface Field {
     id: number;
     email: string;
@@ -38,12 +40,7 @@ const DynamicFields: React.FC = () => {
                 <div key={field.id} style={{ marginBottom: '1rem', display: 'flex', gap: '1rem', alignItems: 'center' }}>
                     <div className='flex flex-row space-x-2'>
                         <div className='w-4/6'>
-                            <Input
-                                placeholder="Enter email"
-                                value={field.email}
-                                onChange={(event) => handleChange(field.id, 'email', event.target.value)}
-                                variant="bordered"
-                            />
+                            <TaggingComponent />
                         </div>
                         <div className='w-2/6'>
                             <Input
