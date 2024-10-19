@@ -8,7 +8,7 @@ interface User {
     password: string;
 }
 
-const Login = () => {
+const Home = () => {
     const [user, setUser] = useState<User>({ email: '', password: '' });
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -115,4 +115,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default Home;

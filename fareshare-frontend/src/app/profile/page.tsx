@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, ChangeEvent, FormEvent } from 'react';
+import CreateTransactionModal from "../components/CreateTransactionModel/CreateTransactionModal"
 import axios from 'axios';
 
 interface User {
@@ -8,14 +9,14 @@ interface User {
     password: string;
 }
 
-const Home = () => {
+const Profile = () => {
 
 
     return (
         <div className="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
-            red
+            <CreateTransactionModal />
         </div>
     );
 };
 
-export default Home;
+export default Profile;

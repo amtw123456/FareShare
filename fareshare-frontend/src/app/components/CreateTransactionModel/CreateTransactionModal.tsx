@@ -43,7 +43,7 @@ export default function CreateTransactionModal() {
     });
 
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
-    const [fields, setFields] = useState<TransactionRelatedUser[]>([
+    const [transactionRelatedUserFields, setTransactionRelatedUserFields] = useState<TransactionRelatedUser[]>([
         { id: Date.now(), user_id: 0, transaction_entry_id: 0, email: "", amount: 0 }
     ]);
     const [query, setQuery] = useState<string>('');
@@ -66,22 +66,22 @@ export default function CreateTransactionModal() {
         setIsSuggestionClicked(true); // Set flag to indicate suggestion click
     };
 
-    const addField = () => {
-        setFields([...fields, { id: Date.now(), user_id: 0, transaction_entry_id: 0, email: "", amount: 0 }]);
+    const addTransactionRelatedUserField = () => {
+        setTransactionRelatedUserFields([...transactionRelatedUserFields, { id: Date.now(), user_id: 0, transaction_entry_id: 0, email: "", amount: 0 }]);
     };
 
     const handleChange = (id: number, field: 'email' | 'amount' | 'user_id', value: string | number) => {
-        const newFields = fields.map((f) => {
+        const newFields = transactionRelatedUserFields.map((f) => {
             if (f.id === id) {
                 return { ...f, [field]: field === 'amount' ? Number(value) : value }; // Update specific field
             }
             return f;
         });
-        setFields(newFields);
+        setTransactionRelatedUserFields(newFields);
     };
 
     const removeField = (id: number) => {
-        setFields(fields.filter((f) => f.id !== id)); // Remove field by id
+        setTransactionRelatedUserFields(transactionRelatedUserFields.filter((f) => f.id !== id)); // Remove field by id
     };
 
     const handleSubmit = async () => {
@@ -162,7 +162,7 @@ export default function CreateTransactionModal() {
                                 {/* Related Users Section */}
                                 <div className='flex flex-col justify-center items-center'>
                                     <span>Related Users</span>
-                                    {fields.map((field) => (
+                                    {transactionRelatedUserFields.map((field) => (
                                         <div key={field.id} style={{ marginBottom: '1rem', display: 'flex', gap: '1rem', alignItems: 'center' }}>
                                             <div className='flex flex-row space-x-2'>
                                                 <div className='w-4/6'>
@@ -202,7 +202,7 @@ export default function CreateTransactionModal() {
                                             </div>
                                         </div>
                                     ))}
-                                    <Button onClick={addField} color="primary">+</Button>
+                                    <Button onClick={addTransactionRelatedUserField} color="primary">+</Button>
                                 </div>
                             </ModalBody>
                             <ModalFooter>
