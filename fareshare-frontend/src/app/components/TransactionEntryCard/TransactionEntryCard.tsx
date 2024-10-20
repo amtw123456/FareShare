@@ -21,7 +21,7 @@ import React, { useMemo } from "react";
 
 export default function TransactionEntryCard() {
     const Map = useMemo(() => dynamic(
-        () => import('../Maps/Maps'),
+        () => import('../Maps/MapsUnClickable'),
         {
             loading: () => <p>A map is loading</p>,
             ssr: false
@@ -85,7 +85,6 @@ export default function TransactionEntryCard() {
             </CardBody>
             <Divider />
             <CardFooter className="px-2 flex justify-center">
-
                 <p className="flex justify-center items-center">Total Transaction Amount: 50</p>
             </CardFooter>
         </Card >
