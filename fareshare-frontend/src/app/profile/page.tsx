@@ -9,26 +9,27 @@ import TransactionEntryCard from '../components/TransactionEntryCard/Transaction
 
 interface TransactionEntry {
     id: number;
-    amount: number;
     title: string;
+    amount: number;
+    user_id: number;
+    created_at: string;
     description: string;
-    userId: number;
 }
 
 
-interface TransactionEntry {
-    // id: number;
-    // title: string;
-    // description: string;
-    // location: [number, number]; // Latitude and longitude
-    // users: { email: string; amount: number; paid: boolean }[]; // List of related users
-    // totalAmount: number;
-    id: number;
-    amount: number;
-    title: string;
-    description: string;
-    userId: number;
-}
+// interface TransactionEntry {
+//     // id: number;
+//     // title: string;
+//     // description: string;
+//     // location: [number, number]; // Latitude and longitude
+//     // users: { email: string; amount: number; paid: boolean }[]; // List of related users
+//     // totalAmount: number;
+//     id: number;
+//     amount: number;
+//     title: string;
+//     description: string;
+//     userId: number;
+// }
 
 const Profile = () => {
     const { token, userId } = useAuth(); // Use your authentication context
