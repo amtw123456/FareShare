@@ -28,13 +28,14 @@ interface User {
 }
 
 interface TransactionRelatedUser {
-    inputField: string
     id: number;
-    transaction_entry_id: number | null;
-    user_id: number | null;
     paid: boolean;
+    email: string | null;
     amount: number;
-    email: string;
+    inputField: string | null
+    user_id: number | null;
+    transaction_entry_id: number | null;
+
 }
 
 export default function CreateTransactionModal() {
@@ -50,7 +51,7 @@ export default function CreateTransactionModal() {
 
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [transactionRelatedUserFields, setTransactionRelatedUserFields] = useState<TransactionRelatedUser[]>([
-        { inputField: "", id: Date.now(), user_id: null, transaction_entry_id: null, paid: false, amount: transaction.amount, email: "" }
+        { inputField: userEmail, id: Date.now(), user_id: userId, transaction_entry_id: null, paid: false, amount: transaction.amount, email: userEmail }
     ]);
     const [query, setQuery] = useState<string>('');
     const [suggestions, setSuggestions] = useState<User[]>([]);
@@ -246,7 +247,11 @@ export default function CreateTransactionModal() {
             <Button onPress={onOpen} color="primary">
                 Create Transaction
             </Button>
-            <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center">
+            <Modal
+                isOpen={isOpen}
+                onOpenChange={onOpenChange}
+                placement="top-center"
+                size={"2xl"} >
                 <ModalContent>
                     {(onClose) => (
                         <>
@@ -287,7 +292,7 @@ export default function CreateTransactionModal() {
                                                     <div>
                                                         <Input
                                                             placeholder="Enter an email or username..."
-                                                            value={transactionRelatedUserField.inputField}
+                                                            value={transactionRelatedUserField.inputField!}
                                                             onChange={(e) => { handleInputChangeSearch(e, transactionRelatedUserField.id); handleInputFieldChange(e, transactionRelatedUserField.id) }}
                                                         />
                                                         {suggestions.length > 0 && focusedFieldId === transactionRelatedUserField.id && ( // Show suggestions only for the focused field
