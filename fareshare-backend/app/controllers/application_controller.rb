@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::API
     before_action :authenticate
    
-    skip_before_action :authenticate, only: [:login, :register]
+    # skip_before_action :authenticate, only: [:login, :register]
 
     rescue_from JWT::VerificationError, with: :invalid_token
     rescue_from JWT::DecodeError, with: :decode_error
