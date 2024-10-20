@@ -51,7 +51,7 @@ export default function CreateTransactionModal() {
 
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [transactionRelatedUserFields, setTransactionRelatedUserFields] = useState<TransactionRelatedUser[]>([
-        { inputField: "", id: Date.now(), user_id: null, transaction_entry_id: null, paid: false, amount: 0, email: "" }
+        { inputField: "", id: Date.now(), user_id: null, transaction_entry_id: null, paid: false, amount: transaction.amount, email: "" }
     ]);
     const [query, setQuery] = useState<string>('');
     const [suggestions, setSuggestions] = useState<User[]>([]);
@@ -84,7 +84,31 @@ export default function CreateTransactionModal() {
     };
 
     const addTransactionRelatedUserField = () => {
-        setTransactionRelatedUserFields([...transactionRelatedUserFields, { inputField: "", id: Date.now(), user_id: 0, transaction_entry_id: 0, paid: false, amount: 0, email: "" }]);
+        // Create a new related user field to add
+        const newRelatedUserField = {
+            inputField: "",
+            id: Date.now(),
+            user_id: 0,
+            transaction_entry_id: 0,
+            paid: false,
+            amount: transaction.amount / (transactionRelatedUserFields.length + 1), // Set initial amount for the new field
+            email: ""
+        };
+
+        // Create an array of all related user fields including the new one
+        const allRelatedUserFields = [...transactionRelatedUserFields, newRelatedUserField];
+
+        // Calculate the new amount to be assigned to each field
+        const updatedAmount = transaction.amount / allRelatedUserFields.length;
+
+        // Update all fields with the new amount
+        const finalizedUserFields = allRelatedUserFields.map(relatedUserField => ({
+            ...relatedUserField,
+            amount: updatedAmount, // Set each field's amount to the new calculated amount
+        }));
+
+        // Set the state with the updated user fields
+        setTransactionRelatedUserFields(finalizedUserFields);
     };
 
     const handleChange = (id: number, field: 'email' | 'amount' | 'user_id' | 'inputField', value: string | number) => {
@@ -195,6 +219,19 @@ export default function CreateTransactionModal() {
             setSuggestions([]); // Reset suggestions when query is empty or suggestion is clicked
         }
     }, [query, isSuggestionClicked]);
+
+    useEffect(() => {
+        const updatedAmount = transaction.amount / transactionRelatedUserFields.length;
+
+        // Update all fields with the new amount
+        const finalizedUserFields = transactionRelatedUserFields.map(relatedUserField => ({
+            ...relatedUserField,
+            amount: updatedAmount, // Set each field's amount to the new calculated amount
+        }));
+
+        // Set the state with the updated user fields
+        setTransactionRelatedUserFields(finalizedUserFields);
+    }, [transaction.amount]);
 
     return (
         <>
