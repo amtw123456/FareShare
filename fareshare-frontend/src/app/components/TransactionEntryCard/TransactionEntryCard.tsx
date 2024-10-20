@@ -16,10 +16,17 @@ import {
     RadioGroup,
     Radio
 } from "@nextui-org/react";
-import React from "react";
+import dynamic from "next/dynamic";
+import React, { useMemo } from "react";
 
 export default function TransactionEntryCard() {
-
+    const Map = useMemo(() => dynamic(
+        () => import('../Maps/Maps'),
+        {
+            loading: () => <p>A map is loading</p>,
+            ssr: false
+        }
+    ), [])
 
     return (
         <Card className="max-w-[500px]">
@@ -33,6 +40,9 @@ export default function TransactionEntryCard() {
             <Divider />
             <CardBody className="px-0 flex flex-col">
                 <p>Make beautiful websites regardless of your design experience.</p>
+                <div className="bg-white-700 mx-auto my-5 w-[98%] h-[280px]">
+                    <Map posix={[14.598202469575067, 120.97252843149849]} />
+                </div>
                 <Divider />
                 <div className="px-2 py-2">
                     <Table
