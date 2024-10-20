@@ -41,7 +41,10 @@ class UsersController < ApplicationController
     user = User.find_by(email: user_params[:email])  # Find user by email
 
     if user && user.authenticate(user_params[:password])  # Check if password is correct
-      render json: { message: "Password is correct." }, status: :ok
+      token = JsonWebToken.encode(user_id: user.id)
+      expires_at = JsonWebToken.decode(token)[:exp]
+ 
+      render json: { token:, expires_at:, user_id: user.id, email: user.email}, status: :ok
     else
       render json: { error: "Invalid email or password." }, status: :unauthorized
     end
