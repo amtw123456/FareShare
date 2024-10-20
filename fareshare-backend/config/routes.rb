@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   resources :transaction_entries do
     collection do
       get 'user/:user_id', to: 'transaction_entries#transactions_by_user', as: 'transactions_by_user'
+      get 'for_user/:user_id', to: 'transaction_entries#transactions_related_to_user', as: 'transactions_related_to_user'
     end
   end
   resources :users, except: [:create]

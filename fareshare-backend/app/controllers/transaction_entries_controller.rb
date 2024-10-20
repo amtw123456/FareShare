@@ -55,6 +55,23 @@ class TransactionEntriesController < ApplicationController
     end
   end
 
+  def transactions_related_to_user
+    user_id = params[:user_id]
+
+    # Find transactions where the user is either the owner or related to the transaction
+    @transactions = TransactionEntry
+                      .left_joins(:transaction_related_users)
+                      .where("transaction_entries.user_id = :user_id OR transaction_related_users.user_id = :user_id", user_id: user_id)
+                      .distinct
+                      .order(created_at: :desc)
+
+    if @transactions.present?
+      render json: @transactions
+    else
+      render json: { error: "No transactions found for user with ID #{user_id}" }, status: :not_found
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_transaction_entry
