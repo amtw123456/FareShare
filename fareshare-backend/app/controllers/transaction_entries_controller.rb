@@ -38,6 +38,17 @@ class TransactionEntriesController < ApplicationController
     @transaction_entry.destroy!
   end
 
+  # GET /transaction_entries/user/:user_id
+  def transactions_by_user
+    @transactions = TransactionEntry.where(user_id: params[:user_id])
+
+    if @transactions.present?
+      render json: @transactions
+    else
+      render json: { error: "No transactions found for user with ID #{params[:user_id]}" }, status: :not_found
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_transaction_entry

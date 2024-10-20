@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
   resources :transaction_related_users
-  resources :transaction_entries
+  resources :transaction_entries do
+    collection do
+      get 'user/:user_id', to: 'transaction_entries#transactions_by_user', as: 'transactions_by_user'
+    end
+  end
   resources :users, except: [:create]
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   post '/login', to: 'users#login'  # Route for the login action
