@@ -5,6 +5,7 @@ import CreateTransactionModal from "../components/CreateTransactionModel/CreateT
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import NavigationBar from '../components/NavigationBar/NavigationBar';
+import TransactionEntryCard from '../components/TransactionEntryCard/TransactionEntryCard';
 
 interface User {
     email: string;
@@ -24,9 +25,13 @@ const Profile = () => {
     return (
         <div className="flex flex-col min-h-screen bg-gray-100 text-gray-900">
             <NavigationBar />
-            <div className='flex justify-center'>
-                <CreateTransactionModal />
-                Profile
+            <div className='flex justify-center mt-5'>
+                <div className='flex flex-col justify-center items-center'>
+                    <CreateTransactionModal />
+                    <div className='mt-5'>
+                        <TransactionEntryCard />
+                    </div>
+                </div>
             </div>
         </div >
     );

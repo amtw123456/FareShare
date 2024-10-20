@@ -9,7 +9,7 @@ export default function NavigationBar() {
         <Navbar isBordered>
             <NavbarBrand>
                 <AcmeLogo />
-                <p className="font-bold text-inherit">ACME</p>
+                <p className="font-bold text-inherit">FareShare</p>
             </NavbarBrand>
             <NavbarContent className="hidden sm:flex gap-4" justify="center">
                 <NavbarItem isActive={pathname === "/home"}>

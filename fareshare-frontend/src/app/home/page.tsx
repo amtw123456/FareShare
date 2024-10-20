@@ -18,9 +18,8 @@ const Home = () => {
     return (
         <div className="flex flex-col min-h-screen bg-gray-100 text-gray-900">
             <NavigationBar />
-            <div className='flex justify-center'>
+            <div className='flex justify-center mt-5'>
                 <CreateTransactionModal />
-                home
             </div>
         </div >
     );
