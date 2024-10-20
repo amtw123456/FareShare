@@ -35,7 +35,13 @@ class TransactionEntriesController < ApplicationController
 
   # DELETE /transaction_entries/1
   def destroy
-    @transaction_entry.destroy!
+    transaction_entry = TransactionEntry.find(params[:id])
+
+    # Delete associated transaction related users
+    transaction_entry.transaction_related_users.destroy_all
+
+    # Now delete the transaction entry
+    transaction_entry.destroy
   end
 
   # GET /transaction_entries/user/:user_id
