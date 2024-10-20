@@ -140,7 +140,7 @@ const TransactionEntryCard: React.FC<TransactionEntryCardProps> = ({ transaction
                         <div className="text-center font-bold text-xl">
                             <p className="px-2">{transactionEntry.title}</p>
                         </div>
-                        <p className="px-2">{transactionEntry.description}</p>
+                        <p className="px-2 text-justify">{transactionEntry.description}</p>
                         <Divider />
                         <div className="bg-white-700 px-2 mx-auto my-5 w-[98%] h-[280px]">
                             <Map posix={[14.598202469575067, 120.97252843149849]} />
@@ -153,20 +153,25 @@ const TransactionEntryCard: React.FC<TransactionEntryCardProps> = ({ transaction
                                     color={"secondary"}
                                     selectionMode="single"
                                     aria-label="Transaction users table"
+
                                 >
                                     <TableHeader>
                                         <TableColumn>Email</TableColumn>
+                                        <TableColumn>Username</TableColumn>
                                         <TableColumn>Amount</TableColumn>
                                         <TableColumn>Paid</TableColumn>
                                     </TableHeader>
                                     <TableBody>
                                         {usersDetails.map((user, index) => (
                                             <TableRow key={index}>
-                                                <TableCell>{user.email}</TableCell>
+                                                <TableCell >{user.email}</TableCell>
+                                                <TableCell >{user.user_name}</TableCell>
                                                 <TableCell>{parseFloat(String(relatedUsers[index].amount)).toFixed(2)}</TableCell>
                                                 <TableCell>{relatedUsers[index].paid ? "Yes" : "No"}</TableCell>
                                             </TableRow>
+
                                         ))}
+
                                     </TableBody>
                                 </Table>
                             ) : (
