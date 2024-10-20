@@ -12,14 +12,13 @@ import {
 } from "@nextui-org/react";
 import axios from 'axios';
 import { XIcon } from './base/XIcon';
-import { GiConsoleController } from 'react-icons/gi';
 import { useAuth } from '@/app/context/AuthContext';
 
 interface TransactionEntry {
     title: string;
     description: string;
     amount: number;
-    user_id: number; // Assuming user_id is to be provided elsewhere
+    user_id: number;
 }
 
 interface User {
@@ -30,7 +29,7 @@ interface User {
 
 interface TransactionRelatedUser {
     inputField: string
-    id: number; // Unique identifier for each related user
+    id: number;
     transaction_entry_id: number | null;
     user_id: number | null;
     paid: boolean;
@@ -112,7 +111,6 @@ export default function CreateTransactionModal() {
     };
 
     const handleChange = (id: number, field: 'email' | 'amount' | 'user_id' | 'inputField', value: string | number) => {
-        console.log(value)
         const newFields = transactionRelatedUserFields.map((f) => {
             if (f.id === id) {
                 return { ...f, [field]: field === 'amount' ? Number(value) : value }; // Update specific field
@@ -121,10 +119,6 @@ export default function CreateTransactionModal() {
         });
         setTransactionRelatedUserFields(newFields);
     };
-
-    useEffect(() => {
-        console.log(transactionRelatedUserFields)
-    }, [transactionRelatedUserFields]);
 
     const handleInputChangeSearch = (e: React.ChangeEvent<HTMLInputElement>, id: number): void => {
         setQuery(e.target.value);
@@ -138,8 +132,22 @@ export default function CreateTransactionModal() {
     }
 
     const removeTransactionRelatedUserField = (id: number) => {
-        setTransactionRelatedUserFields(transactionRelatedUserFields.filter((f) => f.id !== id)); // Remove field by id
+        // Filter out the field to be removed
+        const newTransactionRelatedUserFields = transactionRelatedUserFields.filter((f) => f.id !== id);
+
+        // Calculate the new amount for each remaining field
+        const updatedAmount = transaction.amount / newTransactionRelatedUserFields.length;
+
+        // Update each field's amount
+        const finalizedUserFields = newTransactionRelatedUserFields.map(relatedUserField => ({
+            ...relatedUserField,
+            amount: updatedAmount, // Set each field's amount to the new calculated amount
+        }));
+
+        // Set the state with the updated user fields
+        setTransactionRelatedUserFields(finalizedUserFields);
     };
+
 
     const handleSubmit = async () => {
         try {
@@ -306,13 +314,22 @@ export default function CreateTransactionModal() {
                                                         variant="bordered"
                                                     />
                                                 </div>
-                                                <Button onClick={() => removeTransactionRelatedUserField(transactionRelatedUserField.id)} isIconOnly color="danger" aria-label="Remove User">
+                                                <Button
+                                                    onClick={() => removeTransactionRelatedUserField(transactionRelatedUserField.id)}
+                                                    isIconOnly
+                                                    color={index === 0 ? "default" : "danger"} // Change color based on index
+                                                    aria-label="Remove User"
+                                                    disabled={index === 0} // Disable the button if it's the first field
+                                                >
                                                     <XIcon size={undefined} height={undefined} width={undefined} />
                                                 </Button>
                                             </div>
                                         </div>
                                     ))}
                                     <Button onClick={addTransactionRelatedUserField} color="primary">+</Button>
+                                </div>
+                                <div className='text-center text-xl'>
+                                    Total share per user: {transaction.amount / transactionRelatedUserFields.length}
                                 </div>
                             </ModalBody>
                             <ModalFooter>
