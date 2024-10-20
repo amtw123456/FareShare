@@ -21,7 +21,6 @@ interface TransactionEntry {
     description: string;
 }
 
-
 const Home = () => {
     const { token, userId } = useAuth(); // Use your authentication context
     const [transactionEntries, setTransactionEntries] = useState<TransactionEntry[]>([]); // State to hold transaction entries

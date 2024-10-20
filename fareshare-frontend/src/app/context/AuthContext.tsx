@@ -1,5 +1,6 @@
 // app/AuthContext.tsx
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie'; // Client-side cookie management
 
 interface AuthContextType {
@@ -12,11 +13,13 @@ interface AuthContextType {
     setUserId: (userId: number | null) => void;
     setUserEmail: (email: string | null) => void;
     setTokenExpiry: (tokenExpiry: number | null) => void;
+    logout: () => void; // Add logout function
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+    const router = useRouter(); // Initialize router
     const [token, setToken] = useState<string | null>(Cookies.get('token') || null);
     const [userEmail, setUserEmail] = useState<string | null>(Cookies.get('userEmail') || null);
     const [userId, setUserId] = useState<number | null>(parseInt(Cookies.get('userId') || '0', 10) || null);
@@ -58,6 +61,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         }
     };
 
+    const logout = () => {
+        updateToken(null);
+        updateUserEmail(null);
+        updateUserId(null);
+        updateTokenExpiry(null);
+
+        router.push('/login')
+    };
+
     useEffect(() => {
         // Load values from cookies on mount
         const savedToken = Cookies.get('token');
@@ -72,7 +84,18 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }, []);
 
     return (
-        <AuthContext.Provider value={{ token, userId, userEmail, tokenExpiry, setToken: updateToken, setUserId: updateUserId, setUserEmail: updateUserEmail, setTokenExpiry: updateTokenExpiry }}>
+        <AuthContext.Provider
+            value={{
+                token,
+                userId,
+                userEmail,
+                tokenExpiry,
+                setToken: updateToken,
+                setUserId: updateUserId,
+                setUserEmail: updateUserEmail,
+                setTokenExpiry: updateTokenExpiry,
+                logout
+            }}>
             {children}
         </AuthContext.Provider>
     );
