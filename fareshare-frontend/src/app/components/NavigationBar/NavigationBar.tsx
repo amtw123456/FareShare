@@ -9,29 +9,21 @@ export default function NavigationBar() {
                 <p className="font-bold text-inherit">ACME</p>
             </NavbarBrand>
             <NavbarContent className="hidden sm:flex gap-4" justify="center">
-                <NavbarItem>
-                    <Link color="foreground" href="#">
-                        Features
+                <NavbarItem isActive>
+                    <Link href="/home" aria-current="page">
+                        Feed
                     </Link>
                 </NavbarItem>
                 <NavbarItem isActive>
-                    <Link href="#" aria-current="page">
-                        Customers
-                    </Link>
-                </NavbarItem>
-                <NavbarItem>
-                    <Link color="foreground" href="#">
-                        Integrations
+                    <Link href="/profile" aria-current="page">
+                        Profile
                     </Link>
                 </NavbarItem>
             </NavbarContent>
             <NavbarContent justify="end">
-                <NavbarItem className="hidden lg:flex">
-                    <Link href="#">Login</Link>
-                </NavbarItem>
                 <NavbarItem>
                     <Button as={Link} color="primary" href="#" variant="flat">
-                        Sign Up
+                        Logout
                     </Button>
                 </NavbarItem>
             </NavbarContent>
