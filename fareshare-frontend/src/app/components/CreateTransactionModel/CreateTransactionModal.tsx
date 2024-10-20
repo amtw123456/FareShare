@@ -42,11 +42,6 @@ export default function CreateTransactionModal() {
     const { token, userId, userEmail, tokenExpiry, setToken, setUserId, setUserEmail, setTokenExpiry } = useAuth();
     const [focusedFieldId, setFocusedFieldId] = useState<number | null>(null);
 
-    const handleBlur = () => {
-        // Reset the focusedFieldId when the input field loses focus
-        setFocusedFieldId(null);
-    };
-
     const [transaction, setTransaction] = useState<TransactionEntry>({
         title: '',
         description: '',
@@ -118,7 +113,6 @@ export default function CreateTransactionModal() {
         handleChange(id, 'inputField', e.target.value)
     }
 
-
     const removeTransactionRelatedUserField = (id: number) => {
         setTransactionRelatedUserFields(transactionRelatedUserFields.filter((f) => f.id !== id)); // Remove field by id
     };
@@ -139,9 +133,7 @@ export default function CreateTransactionModal() {
             });
 
             const transactionIdGenerated = postTransactionResponse.data.id
-            console.log(transactionRelatedUserFields.length)
-            console.log(transactionRelatedUserFields[0])
-            console.log(transactionRelatedUserFields)
+
             transactionRelatedUserFields.map(async (transactionRelatedUserField) => {
                 try {
                     const postTransactionRelatedUsersResponse = await axios.post('http://localhost:3000/transaction_related_users', {
@@ -187,7 +179,11 @@ export default function CreateTransactionModal() {
                         console.log("Authentication Error")
                     }
                     else {
-                        setSuggestions(response.data);
+                        const filteredSuggestions = response.data.filter((suggestion: User) =>
+                            !transactionRelatedUserFields.some(field => field.email === suggestion.email)
+                        );
+
+                        setSuggestions(filteredSuggestions);
                     }
 
                 } catch (err) {
