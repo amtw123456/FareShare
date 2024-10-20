@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
     Modal,
     ModalContent,
@@ -13,6 +13,7 @@ import {
 import axios from 'axios';
 import { XIcon } from './base/XIcon';
 import { useAuth } from '@/app/context/AuthContext';
+import dynamic from 'next/dynamic';
 
 interface TransactionEntry {
     title: string;
@@ -242,6 +243,14 @@ export default function CreateTransactionModal() {
         setTransactionRelatedUserFields(finalizedUserFields);
     }, [transaction.amount]);
 
+    const Map = useMemo(() => dynamic(
+        () => import('../Maps/MapsClickable'),
+        {
+            loading: () => <p>A map is loading</p>,
+            ssr: false
+        }
+    ), []);
+
     return (
         <>
             <Button onPress={onOpen} color="primary">
@@ -251,14 +260,15 @@ export default function CreateTransactionModal() {
                 isOpen={isOpen}
                 onOpenChange={onOpenChange}
                 placement="top-center"
-                size={"2xl"} >
+            // size={"xl"}
+            >
                 <ModalContent>
                     {(onClose) => (
                         <>
                             <ModalHeader className="flex flex-col gap-1">
                                 Create a Transaction Entry
                             </ModalHeader>
-                            <ModalBody>
+                            <ModalBody style={{ maxHeight: '400px', overflowY: 'auto' }}>
                                 {/* Transaction Entry Inputs */}
                                 <Input
                                     placeholder="Enter your transaction entry title"
@@ -274,6 +284,9 @@ export default function CreateTransactionModal() {
                                     onChange={(e) => handleInputChangeTransactionEntry('description', e.target.value)}
                                     className="max-w"
                                 />
+                                <div className="bg-white-700 mx-auto my-5 w-[98%] h-[280px]">
+                                    <Map posix={[14.598202469575067, 120.97252843149849]} />
+                                </div>
                                 <Input
                                     type="number"
                                     placeholder="Enter your transaction entry amount"
