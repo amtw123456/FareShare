@@ -38,6 +38,14 @@ class TransactionRelatedUsersController < ApplicationController
     @transaction_related_user.destroy!
   end
 
+   # GET /transaction_related_users/by_transaction/:transaction_entry_id
+  def transaction_related_user_by_transaction
+    transaction_entry_id = params[:transaction_entry_id]
+    @transaction_related_users = TransactionRelatedUser.where(transaction_entry_id: transaction_entry_id)
+
+    render json: @transaction_related_users
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_transaction_related_user

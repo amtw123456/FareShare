@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
-  resources :transaction_related_users
+  resources :transaction_related_users do
+    collection do
+      get 'transaction/:transaction_entry_id', to: 'transaction_related_users#transaction_related_user_by_transaction', as: 'transaction_related_user_by_transaction'
+    end
+  end
   resources :transaction_entries do
     collection do
       get 'user/:user_id', to: 'transaction_entries#transactions_by_user', as: 'transactions_by_user'
