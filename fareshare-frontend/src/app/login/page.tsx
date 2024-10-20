@@ -1,7 +1,10 @@
 "use client";
 
-import { useState, ChangeEvent, FormEvent } from 'react';
+import { useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
+import { useRouter } from 'next/navigation';
+
 
 interface User {
     email: string;
@@ -9,6 +12,9 @@ interface User {
 }
 
 const Login = () => {
+    const { token, userId, userEmail, tokenExpiry, setToken, setUserId, setUserEmail, setTokenExpiry } = useAuth();
+    const router = useRouter(); // Initialize router
+
     const [user, setUser] = useState<User>({ email: '', password: '' });
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -30,6 +36,13 @@ const Login = () => {
 
             // Handle successful login here (e.g., save token, redirect user)
             console.log('Login successful:', response.data);
+            setToken(response.data.token);  // Replace with actual token
+            setUserId(response.data.user_id)
+            setUserEmail(response.data.email);  // Replace with actual email
+            setTokenExpiry(response.data.expires_at);  // Replace with actual email
+
+            router.push('/profile'); // Change to your profile route
+
         } catch (err) {
             if (axios.isAxiosError(err) && err.response) {
                 setError(err.response.data.error || 'Login failed');
@@ -38,6 +51,13 @@ const Login = () => {
             }
         }
     };
+
+    useEffect(() => {
+        console.log(token)
+        console.log(userId)
+        console.log(userEmail)
+        console.log(tokenExpiry)
+    }, [token, userId, userEmail, tokenExpiry]);
 
     return (
         <div className="min-h-screen bg-gray-100 text-gray-900 flex justify-center">

@@ -12,6 +12,8 @@ import {
 } from "@nextui-org/react";
 import axios from 'axios';
 import { XIcon } from './base/XIcon';
+import { GiConsoleController } from 'react-icons/gi';
+import { useAuth } from '@/app/context/AuthContext';
 
 interface TransactionEntry {
     title: string;
@@ -35,6 +37,15 @@ interface TransactionRelatedUser {
 }
 
 export default function CreateTransactionModal() {
+    const { token, userId, userEmail, tokenExpiry, setToken, setUserId, setUserEmail, setTokenExpiry } = useAuth();
+
+    useEffect(() => {
+        console.log(token)
+        console.log(userId)
+        console.log(userEmail)
+        console.log(tokenExpiry)
+    }, [token, userId, userEmail, tokenExpiry]);
+
     const [transaction, setTransaction] = useState<TransactionEntry>({
         title: '',
         description: '',
@@ -97,9 +108,9 @@ export default function CreateTransactionModal() {
             console.log('Transaction entry created:', response.data);
         } catch (err) {
             if (axios.isAxiosError(err) && err.response) {
-                console.error(err.response.data.error || 'Transaction creation failed');
+                console.log(err.response.data.error || 'Transaction creation failed');
             } else {
-                console.error('An unexpected error occurred');
+                console.log('An unexpected error occurred');
             }
         }
         // Clear the form after submission
@@ -110,9 +121,20 @@ export default function CreateTransactionModal() {
     useEffect(() => {
         if (query && !isSuggestionClicked) {
             const fetchSuggestions = async () => {
+                const token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo1LCJleHAiOjE3Mjk0MzEzNTJ9.-vFdqQVXjSOtbGQUe7VuYF2TOdmn4wKNCQ09OZ0z3-c"
                 try {
-                    const response = await axios.get(`http://localhost:3000/search?query=${query}`);
-                    setSuggestions(response.data);
+                    const response = await axios.get(`http://localhost:3000/search?query=${query}`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`  // Set the Bearer token in the Authorization header
+                        }
+                    });
+                    if (response.data.decode_error) {
+                        console.log("Authentication Error")
+                    }
+                    else {
+                        setSuggestions(response.data);
+                    }
+
                 } catch (err) {
                     console.error("Error fetching suggestions", err);
                 }
