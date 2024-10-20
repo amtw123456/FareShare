@@ -53,10 +53,10 @@ const Login = () => {
     };
 
     useEffect(() => {
-        console.log(token)
-        console.log(userId)
-        console.log(userEmail)
-        console.log(tokenExpiry)
+        // console.log(token)
+        // console.log(userId)
+        // console.log(userEmail)
+        // console.log(tokenExpiry)
     }, [token, userId, userEmail, tokenExpiry]);
 
     return (

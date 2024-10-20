@@ -39,13 +39,6 @@ interface TransactionRelatedUser {
 export default function CreateTransactionModal() {
     const { token, userId, userEmail, tokenExpiry, setToken, setUserId, setUserEmail, setTokenExpiry } = useAuth();
 
-    useEffect(() => {
-        console.log(token)
-        console.log(userId)
-        console.log(userEmail)
-        console.log(tokenExpiry)
-    }, [token, userId, userEmail, tokenExpiry]);
-
     const [transaction, setTransaction] = useState<TransactionEntry>({
         title: '',
         description: '',
@@ -96,14 +89,19 @@ export default function CreateTransactionModal() {
     };
 
     const handleSubmit = async () => {
+        console.log(token)
         try {
             const response = await axios.post('http://localhost:3000/transaction_entries', {
                 transaction_entry: {
                     title: transaction.title,
                     description: transaction.description,
-                    user_id: transaction.user_id,
+                    user_id: userId,
                     amount: transaction.amount
-                },
+                }
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`  // Set the Bearer token in the Authorization header
+                }
             });
             console.log('Transaction entry created:', response.data);
         } catch (err) {
@@ -121,7 +119,6 @@ export default function CreateTransactionModal() {
     useEffect(() => {
         if (query && !isSuggestionClicked) {
             const fetchSuggestions = async () => {
-                const token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo1LCJleHAiOjE3Mjk0MzEzNTJ9.-vFdqQVXjSOtbGQUe7VuYF2TOdmn4wKNCQ09OZ0z3-c"
                 try {
                     const response = await axios.get(`http://localhost:3000/search?query=${query}`, {
                         headers: {
