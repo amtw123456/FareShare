@@ -41,7 +41,7 @@ const Login = () => {
             setUserEmail(response.data.email);  // Replace with actual email
             setTokenExpiry(response.data.expires_at);  // Replace with actual email
 
-            router.push('/profile'); // Change to your profile route
+            router.push('/home'); // Change to your profile route
 
         } catch (err) {
             if (axios.isAxiosError(err) && err.response) {
