@@ -6,7 +6,7 @@ export default function NavigationBar() {
     const pathname = usePathname(); // Get the current pathname directly from the hook
 
     return (
-        <Navbar isBordered>
+        <Navbar isBordered className="z-50">
             <NavbarBrand>
                 <AcmeLogo />
                 <p className="font-bold text-inherit">FareShare</p>
