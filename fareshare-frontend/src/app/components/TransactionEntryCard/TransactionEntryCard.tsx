@@ -71,6 +71,23 @@ const TransactionEntryCard: React.FC<TransactionEntryCardProps> = ({ transaction
 
     const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
+    const deleteTransactionEntry = async () => {
+        try {
+            const response = await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/transaction_entries/${transactionEntry.id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}` // Set the Bearer token in the Authorization header
+                }
+            });
+
+            if (response.status === 200) {
+                console.log("Transaction entry deleted successfully:", response.data);
+                return response.data; // Optionally return the response data if needed
+            }
+        } catch (error) {
+            console.error("Error deleting transaction entry:", error);
+        }
+    };
+
     useEffect(() => {
         const fetchRelatedUsers = async () => {
             await delay(1000); // Delay between each API request
@@ -175,8 +192,8 @@ const TransactionEntryCard: React.FC<TransactionEntryCardProps> = ({ transaction
                                     <DropdownItem
                                         key="delete"
                                         className="text-danger"
-                                        color="danger"
                                         startContent={<DeleteDocumentIcon className={cn(iconClasses, "text-danger")} />}
+                                        onClick={deleteTransactionEntry}
                                     >
                                         Delete file
                                     </DropdownItem>
