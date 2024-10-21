@@ -15,19 +15,19 @@ export default function NavigationBar() {
             </NavbarBrand>
             <NavbarContent className="hidden sm:flex gap-4" justify="center">
                 <NavbarItem isActive={pathname === "/home"}>
-                    <Link href="/home" aria-current={pathname === "/home" ? "page" : undefined}>
+                    <Link href="/home" color="secondary" aria-current={pathname === "/home" ? "page" : undefined}>
                         Feed
                     </Link>
                 </NavbarItem>
                 <NavbarItem isActive={pathname === "/profile"}>
-                    <Link href="/profile" aria-current={pathname === "/profile" ? "page" : undefined}>
+                    <Link href="/profile" color="secondary" aria-current={pathname === "/profile" ? "page" : undefined}>
                         Profile
                     </Link>
                 </NavbarItem>
             </NavbarContent>
             <NavbarContent justify="end">
                 <NavbarItem>
-                    <Button onClick={logout} color="primary" href="#" variant="flat">
+                    <Button onClick={logout} color="secondary" href="#" variant="flat">
                         Logout
                     </Button>
                 </NavbarItem>
