@@ -8,7 +8,10 @@ import NavigationBar from '../components/NavigationBar/NavigationBar';
 import TransactionEntryCard from '../components/TransactionEntryCard/TransactionEntryCard';
 
 interface TransactionEntry {
+
     id: number;
+    lat: number;
+    long: number;
     title: string;
     amount: number;
     user_id: number;
@@ -16,20 +19,6 @@ interface TransactionEntry {
     description: string;
 }
 
-
-// interface TransactionEntry {
-//     // id: number;
-//     // title: string;
-//     // description: string;
-//     // location: [number, number]; // Latitude and longitude
-//     // users: { email: string; amount: number; paid: boolean }[]; // List of related users
-//     // totalAmount: number;
-//     id: number;
-//     amount: number;
-//     title: string;
-//     description: string;
-//     userId: number;
-// }
 
 const Profile = () => {
     const { token, userId } = useAuth(); // Use your authentication context

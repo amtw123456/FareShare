@@ -24,6 +24,8 @@ interface TransactionEntry {
     amount: number;
     created_at: string;
     user_id: number;
+    lat: number;
+    long: number;
 }
 
 interface TransactionRelatedUser {
@@ -143,7 +145,7 @@ const TransactionEntryCard: React.FC<TransactionEntryCardProps> = ({ transaction
                         <p className="px-2 text-justify">{transactionEntry.description}</p>
                         <Divider />
                         <div className="bg-white-700 px-2 mx-auto my-5 w-[98%] h-[280px]">
-                            <Map posix={[14.598202469575067, 120.97252843149849]} />
+                            <Map posix={[transactionEntry.lat, transactionEntry.long]} />
                         </div>
                         <Divider />
                         <div className="px-2 py-2">

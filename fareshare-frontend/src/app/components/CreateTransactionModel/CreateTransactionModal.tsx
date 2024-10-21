@@ -15,6 +15,7 @@ import axios from 'axios';
 import { XIcon } from './base/XIcon';
 import { useAuth } from '@/app/context/AuthContext';
 import dynamic from 'next/dynamic';
+import { LatLngExpression, LatLngTuple } from 'leaflet';
 
 interface TransactionEntry {
     title: string;
@@ -40,9 +41,16 @@ interface TransactionRelatedUser {
 
 }
 
+interface MapProps {
+    posix: LatLngExpression | LatLngTuple,
+    zoom?: number,
+}
+
 export default function CreateTransactionModal() {
     const { token, userId, userEmail, tokenExpiry, setToken, setUserId, setUserEmail, setTokenExpiry } = useAuth();
+    const [mapPosition, setMapPosition] = useState<[number, number]>([14.598202469575067, 120.97252843149849]);
     const [focusedFieldId, setFocusedFieldId] = useState<number | null>(null);
+
 
     const [transaction, setTransaction] = useState<TransactionEntry>({
         title: '',
@@ -153,13 +161,16 @@ export default function CreateTransactionModal() {
 
 
     const handleSubmit = async () => {
+        console.log(mapPosition)
         try {
             const postTransactionResponse = await axios.post('http://localhost:3000/transaction_entries', {
                 transaction_entry: {
                     title: transaction.title,
                     description: transaction.description,
                     user_id: userId,
-                    amount: transaction.amount
+                    amount: transaction.amount,
+                    lat: mapPosition[0],
+                    long: mapPosition[1]
                 }
             }, {
                 headers: {
@@ -253,6 +264,18 @@ export default function CreateTransactionModal() {
         }
     ), []);
 
+    const handlePositionChange = (newPosition: LatLngTuple) => {
+        const [lat, lng] = newPosition;
+        console.log('before')
+        console.log(mapPosition)
+        setMapPosition([lat, lng]);
+    };
+
+    useEffect(() => {
+        console.log('after')
+        console.log(mapPosition)
+    }, [mapPosition]);
+
     return (
         <>
             <Button onPress={onOpen} color="primary">
@@ -290,7 +313,7 @@ export default function CreateTransactionModal() {
                                     className="max-w"
                                 />
                                 <div className="mx-auto my-5 w-[98%] h-[250px] shrink-0">
-                                    <Map posix={[14.598202469575067, 120.97252843149849]} />
+                                    <Map posix={[14.598202469575067, 120.97252843149849]} onPositionChange={handlePositionChange} />
                                 </div>
 
                                 <div className='flex flex-row space-x-2'>
