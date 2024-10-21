@@ -62,7 +62,7 @@ const Profile = () => {
                             <p>Loading transaction entries...</p>
                         ) : (
                             transactionEntries.map((transactionEntry) => (
-                                <TransactionEntryCard key={transactionEntry.id} transactionEntry={transactionEntry} />
+                                <TransactionEntryCard key={transactionEntry.id} transactionEntry={transactionEntry} showDropDownSettings={true} />
                             ))
                         )}
                     </div>

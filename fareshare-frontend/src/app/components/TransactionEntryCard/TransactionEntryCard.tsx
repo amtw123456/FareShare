@@ -53,9 +53,10 @@ interface User {
 
 interface TransactionEntryCardProps {
     transactionEntry: TransactionEntry;
+    showDropDownSettings: boolean;
 }
 
-const TransactionEntryCard: React.FC<TransactionEntryCardProps> = ({ transactionEntry }) => {
+const TransactionEntryCard: React.FC<TransactionEntryCardProps> = ({ transactionEntry, showDropDownSettings }) => {
     const { token } = useAuth();
     const [relatedUsers, setRelatedUsers] = useState<TransactionRelatedUser[]>([]);
     const [usersDetails, setUsersDetails] = useState<User[]>([]);
@@ -176,29 +177,31 @@ const TransactionEntryCard: React.FC<TransactionEntryCardProps> = ({ transaction
                             </div>
                         </div>
                         <div>
-                            <Dropdown>
-                                <DropdownTrigger>
-                                    <Button isIconOnly className="bg-color-white">
-                                        <EllipsisIcon size={undefined} height={undefined} width={undefined} label={undefined} />
-                                    </Button>
-                                </DropdownTrigger>
-                                <DropdownMenu variant="faded" aria-label="Dropdown menu with icons">
-                                    <DropdownItem
-                                        key="edit"
-                                        startContent={<EditDocumentIcon className={iconClasses} />}
-                                    >
-                                        Edit file
-                                    </DropdownItem>
-                                    <DropdownItem
-                                        key="delete"
-                                        className="text-danger"
-                                        startContent={<DeleteDocumentIcon className={cn(iconClasses, "text-danger")} />}
-                                        onClick={deleteTransactionEntry}
-                                    >
-                                        Delete file
-                                    </DropdownItem>
-                                </DropdownMenu>
-                            </Dropdown>
+                            {showDropDownSettings && (
+                                <Dropdown>
+                                    <DropdownTrigger>
+                                        <Button isIconOnly className="bg-color-white">
+                                            <EllipsisIcon size={undefined} height={undefined} width={undefined} label={undefined} />
+                                        </Button>
+                                    </DropdownTrigger>
+                                    <DropdownMenu variant="faded" aria-label="Dropdown menu with icons">
+                                        <DropdownItem
+                                            key="edit"
+                                            startContent={<EditDocumentIcon className={iconClasses} />}
+                                        >
+                                            Edit file
+                                        </DropdownItem>
+                                        <DropdownItem
+                                            key="delete"
+                                            className="text-danger"
+                                            startContent={<DeleteDocumentIcon className={cn(iconClasses, "text-danger")} />}
+                                            onClick={deleteTransactionEntry}
+                                        >
+                                            Delete file
+                                        </DropdownItem>
+                                    </DropdownMenu>
+                                </Dropdown>
+                            )}
                         </div>
                     </CardHeader>
 

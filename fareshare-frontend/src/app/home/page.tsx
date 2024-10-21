@@ -65,7 +65,7 @@ const Home = () => {
                             <p>Loading transaction entries...</p>
                         ) : (
                             transactionEntries.map((transactionEntry) => (
-                                <TransactionEntryCard key={transactionEntry.id} transactionEntry={transactionEntry} />
+                                <TransactionEntryCard key={transactionEntry.id} transactionEntry={transactionEntry} showDropDownSettings={false} />
                             ))
                         )}
                     </div>
