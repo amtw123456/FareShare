@@ -11,11 +11,21 @@ import {
     TableColumn,
     TableBody,
     TableRow,
-    TableCell
+    TableCell,
+    Button,
+    Dropdown,
+    DropdownTrigger,
+    DropdownMenu,
+    DropdownItem,
+    cn
 } from "@nextui-org/react";
 import axios from "axios";
 import dynamic from "next/dynamic";
 import React, { useEffect, useMemo, useState } from "react";
+import { EllipsisIcon } from "./base/EllipsisIcon";
+
+import { DeleteDocumentIcon } from "./base/DeleteDocumentIcon";
+import { EditDocumentIcon } from "./base/EditDocumentIcon";
 
 interface TransactionEntry {
     id: number;
@@ -123,27 +133,58 @@ const TransactionEntryCard: React.FC<TransactionEntryCardProps> = ({ transaction
 
     }, [usersDetails]);
 
+    const iconClasses = "text-xl text-default-500 pointer-events-none flex-shrink-0";
+
+
     return (
         <>
             {transactionCardOwnerName && ( // Check if transactionCardOwnerName is set
                 <Card className="w-[500px]">
-                    <CardHeader className="flex gap-3">
-                        <Avatar showFallback src='https://images.unsplash.com/broken' />
-                        <div className="flex flex-col">
-                            <p className="text-md">{transactionCardOwnerName}</p>
-                            <p className="text-small text-default-500">
-                                {new Date(transactionEntry.created_at).toLocaleString('default', {
-                                    year: 'numeric',
-                                    month: 'long',
-                                    day: 'numeric',
-                                    hour: '2-digit',
-                                    minute: '2-digit',
-                                    second: '2-digit',
-                                    hour12: true // Set to false for 24-hour format
-                                })}
-                            </p>
+                    <CardHeader className="flex justify-between items-center gap-3">
+                        <div className="flex gap-3 items-center">
+                            <Avatar showFallback src='https://images.unsplash.com/broken' />
+                            <div className="flex flex-col">
+                                <p className="text-md">{transactionCardOwnerName}</p>
+                                <p className="text-small text-default-500">
+                                    {new Date(transactionEntry.created_at).toLocaleString('default', {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric',
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                        second: '2-digit',
+                                        hour12: true // Set to false for 24-hour format
+                                    })}
+                                </p>
+                            </div>
+                        </div>
+                        <div>
+                            <Dropdown>
+                                <DropdownTrigger>
+                                    <Button isIconOnly className="bg-color-white">
+                                        <EllipsisIcon size={undefined} height={undefined} width={undefined} label={undefined} />
+                                    </Button>
+                                </DropdownTrigger>
+                                <DropdownMenu variant="faded" aria-label="Dropdown menu with icons">
+                                    <DropdownItem
+                                        key="edit"
+                                        startContent={<EditDocumentIcon className={iconClasses} />}
+                                    >
+                                        Edit file
+                                    </DropdownItem>
+                                    <DropdownItem
+                                        key="delete"
+                                        className="text-danger"
+                                        color="danger"
+                                        startContent={<DeleteDocumentIcon className={cn(iconClasses, "text-danger")} />}
+                                    >
+                                        Delete file
+                                    </DropdownItem>
+                                </DropdownMenu>
+                            </Dropdown>
                         </div>
                     </CardHeader>
+
                     <Divider />
                     <CardBody className="px-0 flex flex-col">
                         <div className="text-center font-bold text-xl">

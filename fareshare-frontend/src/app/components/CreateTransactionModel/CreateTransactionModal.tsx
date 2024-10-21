@@ -241,7 +241,7 @@ export default function CreateTransactionModal() {
         } else {
             setSuggestions([]); // Reset suggestions when query is empty or suggestion is clicked
         }
-    }, [query, isSuggestionClicked]);
+    }, [query, isSuggestionClicked, 3000]);
 
     useEffect(() => {
         const updatedAmount = transaction.amount / transactionRelatedUserFields.length;
