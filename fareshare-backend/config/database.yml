@@ -16,9 +16,6 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: 5
-  # username: db_n2lf_user
-  # password: BBbae892uDkYuF5iHmuJrNk5RofHVN2w
-  # host: dpg-csb2bhjtq21c7396no50-a.oregon-postgres.render.com
   url: <%= ENV["DATABASE_URL"] %>
   port: 5432
 

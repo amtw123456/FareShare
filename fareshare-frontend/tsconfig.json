@@ -21,6 +21,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/components/CreateTransactionModel", "src/app/mapping/page.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/components/CreateTransactionModel", "src/app/mapping/page.jsx", "src/app/components/TransactionEntryCard/base/EllipsisIcon.jsx"],
   "exclude": ["node_modules"]
 }
