@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   post '/register', to: 'users#register'  # Route for the registration action
   get '/search', to: 'users#search'
   get '/find_by_userIds', to: 'users#find_by_userIds'
+  get '/hello', to: 'users#hello'
   
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
