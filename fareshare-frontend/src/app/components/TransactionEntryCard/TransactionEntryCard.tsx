@@ -59,15 +59,20 @@ const TransactionEntryCard: React.FC<TransactionEntryCardProps> = ({ transaction
         }
     ), []);
 
+    const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
     useEffect(() => {
         const fetchRelatedUsers = async () => {
+            await delay(1000); // Delay between each API request
+
             try {
-                const response = await axios.get(`http://localhost:3000/transaction_related_users/transaction/${transactionEntry.id}`,
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/transaction_related_users/transaction/${transactionEntry.id}`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`  // Set the Bearer token in the Authorization header
                         }
                     });
+
                 setRelatedUsers(response.data); // Set the related users state
             } catch (error) {
                 console.error("Error fetching related users:", error);
@@ -84,6 +89,8 @@ const TransactionEntryCard: React.FC<TransactionEntryCardProps> = ({ transaction
 
         const fetchUsersByIds = async (ids: number[]) => {
             try {
+                await delay(1000); // Delay between each API request
+
                 // Make a GET request to the API with the IDs
                 const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/find_by_userIds`, {
                     params: {
@@ -93,6 +100,7 @@ const TransactionEntryCard: React.FC<TransactionEntryCardProps> = ({ transaction
                         Authorization: `Bearer ${token}`, // Set the Bearer token in the Authorization header
                     },
                 });
+
                 setUsersDetails(response.data); // Return the data received from the API
             } catch (error) {
                 console.error('Error fetching users by IDs:', error);
