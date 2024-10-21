@@ -17,7 +17,8 @@ import {
     DropdownTrigger,
     DropdownMenu,
     DropdownItem,
-    cn
+    cn,
+    Skeleton
 } from "@nextui-org/react";
 import axios from "axios";
 import dynamic from "next/dynamic";
@@ -58,9 +59,11 @@ interface TransactionEntryCardProps {
 
 const TransactionEntryCard: React.FC<TransactionEntryCardProps> = ({ transactionEntry, showDropDownSettings }) => {
     const { token } = useAuth();
+    const [loading, setLoading] = useState(true);
     const [relatedUsers, setRelatedUsers] = useState<TransactionRelatedUser[]>([]);
     const [usersDetails, setUsersDetails] = useState<User[]>([]);
     const [transactionCardOwnerName, setTransactionCardOwnerName] = useState<String | null>();
+
 
     const Map = useMemo(() => dynamic(
         () => import('../Maps/MapsUnClickable'),
@@ -101,6 +104,7 @@ const TransactionEntryCard: React.FC<TransactionEntryCardProps> = ({ transaction
                         }
                     });
 
+
                 setRelatedUsers(response.data); // Set the related users state
             } catch (error) {
                 console.error("Error fetching related users:", error);
@@ -130,6 +134,7 @@ const TransactionEntryCard: React.FC<TransactionEntryCardProps> = ({ transaction
                 });
 
                 setUsersDetails(response.data); // Return the data received from the API
+                setLoading(false);
             } catch (error) {
                 console.error('Error fetching users by IDs:', error);
                 throw error; // Throw the error for further handling if needed
@@ -155,8 +160,10 @@ const TransactionEntryCard: React.FC<TransactionEntryCardProps> = ({ transaction
 
 
     return (
-        <>
-            {transactionCardOwnerName && ( // Check if transactionCardOwnerName is set
+        loading ? ( // Show skeleton while loading
+            <Skeleton className="w-[500px] h-[400px]" /> // Adjust dimensions as necessary
+        ) : (
+            transactionCardOwnerName && ( // Check if transactionCardOwnerName is set
                 <Card className="w-[500px]">
                     <CardHeader className="flex justify-between items-center gap-3">
                         <div className="flex gap-3 items-center">
@@ -223,7 +230,6 @@ const TransactionEntryCard: React.FC<TransactionEntryCardProps> = ({ transaction
                                     color={"secondary"}
                                     selectionMode="single"
                                     aria-label="Transaction users table"
-
                                 >
                                     <TableHeader>
                                         <TableColumn>Email</TableColumn>
@@ -234,8 +240,8 @@ const TransactionEntryCard: React.FC<TransactionEntryCardProps> = ({ transaction
                                     <TableBody>
                                         {usersDetails.map((user, index) => (
                                             <TableRow key={index}>
-                                                <TableCell >{user.email}</TableCell>
-                                                <TableCell >{user.user_name}</TableCell>
+                                                <TableCell>{user.email}</TableCell>
+                                                <TableCell>{user.user_name}</TableCell>
                                                 <TableCell>{parseFloat(String(relatedUsers[index].amount)).toFixed(2)}</TableCell>
                                                 <TableCell>{relatedUsers[index].paid ? "Yes" : "No"}</TableCell>
                                             </TableRow>
@@ -254,9 +260,10 @@ const TransactionEntryCard: React.FC<TransactionEntryCardProps> = ({ transaction
                         </p>
                     </CardFooter>
                 </Card>
-            )}
-        </>
+            )
+        )
     );
+
 };
 
 export default TransactionEntryCard;

@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import NavigationBar from '../components/NavigationBar/NavigationBar';
 import TransactionEntryCard from '../components/TransactionEntryCard/TransactionEntryCard';
+import { CircularProgress } from '@nextui-org/react';
 
 interface TransactionEntry {
 
@@ -59,7 +60,7 @@ const Profile = () => {
                     <CreateTransactionModal />
                     <div className='mt-5 space-y-4'>
                         {loading ? ( // Show loading state
-                            <p>Loading transaction entries...</p>
+                            <CircularProgress color={'secondary'} label="Loading transaction entries" />
                         ) : (
                             transactionEntries.map((transactionEntry) => (
                                 <TransactionEntryCard key={transactionEntry.id} transactionEntry={transactionEntry} showDropDownSettings={true} />
