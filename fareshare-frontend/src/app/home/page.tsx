@@ -14,6 +14,8 @@ interface User {
 
 interface TransactionEntry {
     id: number;
+    lat: number;
+    long: number;
     title: string;
     amount: number;
     user_id: number;
@@ -28,14 +30,14 @@ const Home = () => {
 
     // Function to fetch transaction entries
     const fetchTransactionEntries = async () => {
-        console.log(userId)
+
         try {
-            const response = await axios.get(`http://localhost:3000/transaction_entries/for_user/${userId}`, {
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/transaction_entries/for_user/${userId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`, // Include token if needed
                 },
             });
-            console.log(response.data)
+
             setTransactionEntries(response.data); // Set the state with fetched data
         } catch (error) {
             console.error("Error fetching transaction entries:", error);

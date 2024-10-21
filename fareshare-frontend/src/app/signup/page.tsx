@@ -24,7 +24,7 @@ const Signup = () => {
         e.preventDefault(); // Prevent the default form submission behavior
         console.log(user)
         try {
-            const response = await axios.post('http://localhost:3000/register', {
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/register`, {
                 user: {  // Wrap the email and password in a user object
                     first_name: user.first_name,
                     last_name: user.last_name,

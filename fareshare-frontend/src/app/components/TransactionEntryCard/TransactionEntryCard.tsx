@@ -85,7 +85,7 @@ const TransactionEntryCard: React.FC<TransactionEntryCardProps> = ({ transaction
         const fetchUsersByIds = async (ids: number[]) => {
             try {
                 // Make a GET request to the API with the IDs
-                const response = await axios.get(`http://localhost:3000/find_by_userIds`, {
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/find_by_userIds`, {
                     params: {
                         ids: ids.join(','), // Convert array of IDs to a comma-separated string
                     },
@@ -111,7 +111,6 @@ const TransactionEntryCard: React.FC<TransactionEntryCardProps> = ({ transaction
             }
             return null; // Return null for non-matching users
         }).filter(email => email !== null)
-        console.log(ownerOfTransactionCard)
         setTransactionCardOwnerName(ownerOfTransactionCard.length > 0 ? ownerOfTransactionCard[0] : null);
 
     }, [usersDetails]);

@@ -161,9 +161,9 @@ export default function CreateTransactionModal() {
 
 
     const handleSubmit = async () => {
-        console.log(mapPosition)
+
         try {
-            const postTransactionResponse = await axios.post('http://localhost:3000/transaction_entries', {
+            const postTransactionResponse = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/transaction_entries`, {
                 transaction_entry: {
                     title: transaction.title,
                     description: transaction.description,
@@ -182,7 +182,7 @@ export default function CreateTransactionModal() {
 
             transactionRelatedUserFields.map(async (transactionRelatedUserField) => {
                 try {
-                    const postTransactionRelatedUsersResponse = await axios.post('http://localhost:3000/transaction_related_users', {
+                    const postTransactionRelatedUsersResponse = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/transaction_related_users`, {
                         transaction_related_user: {
                             amount: transactionRelatedUserField.amount, // Assuming each field has an amount property
                             user_id: transactionRelatedUserField.user_id, // Assuming each field has a user_id property
@@ -217,7 +217,7 @@ export default function CreateTransactionModal() {
         if (query && !isSuggestionClicked) {
             const fetchSuggestions = async () => {
                 try {
-                    const response = await axios.get(`http://localhost:3000/search?query=${query}`, {
+                    const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/search?query=${query}`, {
                         headers: {
                             Authorization: `Bearer ${token}`  // Set the Bearer token in the Authorization header
                         }
@@ -266,15 +266,10 @@ export default function CreateTransactionModal() {
 
     const handlePositionChange = (newPosition: LatLngTuple) => {
         const [lat, lng] = newPosition;
-        console.log('before')
-        console.log(mapPosition)
         setMapPosition([lat, lng]);
     };
 
-    useEffect(() => {
-        console.log('after')
-        console.log(mapPosition)
-    }, [mapPosition]);
+
 
     return (
         <>

@@ -29,7 +29,7 @@ const Profile = () => {
     const fetchTransactionEntries = async () => {
         console.log(userId)
         try {
-            const response = await axios.get(`http://localhost:3000/transaction_entries/user/${userId}`, {
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/transaction_entries/user/${userId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`, // Include token if needed
                 },

@@ -25,9 +25,8 @@ const Login = () => {
 
     const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault(); // Prevent the default form submission behavior
-        console.log(user)
         try {
-            const response = await axios.post('http://localhost:3000/login', {
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/login`, {
                 user: {  // Wrap the email and password in a user object
                     email: user.email,
                     password: user.password,
@@ -35,7 +34,7 @@ const Login = () => {
             });
 
             // Handle successful login here (e.g., save token, redirect user)
-            console.log('Login successful:', response.data);
+
             setToken(response.data.token);  // Replace with actual token
             setUserId(response.data.user_id)
             setUserEmail(response.data.email);  // Replace with actual email
