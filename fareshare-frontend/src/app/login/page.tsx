@@ -25,6 +25,9 @@ const Login = () => {
 
     const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault(); // Prevent the default form submission behavior
+        console.log('purple')
+        console.log(`${process.env.NEXT_PUBLIC_BACKEND_URL}`)
+        console.log('yellow')
         try {
             const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/login`, {
                 user: {  // Wrap the email and password in a user object
