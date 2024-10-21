@@ -9,6 +9,7 @@ import {
     useDisclosure,
     Input,
     Textarea,
+    Switch,
 } from "@nextui-org/react";
 import axios from 'axios';
 import { XIcon } from './base/XIcon';
@@ -112,7 +113,7 @@ export default function CreateTransactionModal() {
         setTransactionRelatedUserFields(finalizedUserFields);
     };
 
-    const handleChange = (id: number, field: 'email' | 'amount' | 'user_id' | 'inputField', value: string | number) => {
+    const handleChange = (id: number, field: 'email' | 'amount' | 'user_id' | 'inputField' | 'paid', value: string | number | boolean) => {
         const newFields = transactionRelatedUserFields.map((f) => {
             if (f.id === id) {
                 return { ...f, [field]: field === 'amount' ? Number(value) : value }; // Update specific field
@@ -174,7 +175,8 @@ export default function CreateTransactionModal() {
                         transaction_related_user: {
                             amount: transactionRelatedUserField.amount, // Assuming each field has an amount property
                             user_id: transactionRelatedUserField.user_id, // Assuming each field has a user_id property
-                            transaction_entry_id: transactionIdGenerated
+                            transaction_entry_id: transactionIdGenerated,
+                            paid: transactionRelatedUserField.paid
                         }
                     }, {
                         headers: {
@@ -260,7 +262,7 @@ export default function CreateTransactionModal() {
                 isOpen={isOpen}
                 onOpenChange={onOpenChange}
                 placement="top-center"
-                size={"lg"}
+                size={"xl"}
             >
                 <ModalContent>
                     {(onClose) => (
@@ -319,34 +321,32 @@ export default function CreateTransactionModal() {
                                     <span className='mb-4'>Related Users</span>
                                     {transactionRelatedUserFields.map((transactionRelatedUserField, index) => (
                                         <div key={transactionRelatedUserField.id} style={{ marginBottom: '1rem', display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                                            <div className='flex flex-row space-x-1'>
-                                                <div className='w-5/6'>
-                                                    <div>
-                                                        <Input
-                                                            placeholder="Enter an email"
-                                                            label="Email:"
-                                                            labelPlacement="outside-left"
-                                                            value={transactionRelatedUserField.inputField!}
-                                                            onChange={(e) => { handleInputChangeSearch(e, transactionRelatedUserField.id); handleInputFieldChange(e, transactionRelatedUserField.id) }}
-                                                        />
-                                                        {suggestions.length > 0 && focusedFieldId === transactionRelatedUserField.id && ( // Show suggestions only for the focused field
-                                                            <ul className="mt-2 bg-white border border-gray-300 rounded">
-                                                                {suggestions.map((user) => (
-                                                                    <li
-                                                                        key={user.id}
-                                                                        className="p-2 cursor-pointer border-b border-gray-200 hover:bg-gray-100"
-                                                                        onClick={() => handleSuggestionClick(user, transactionRelatedUserField.id)}
-                                                                    >
-                                                                        {user.email}
-                                                                    </li>
-                                                                ))}
-                                                            </ul>
-                                                        )}
-                                                    </div>
-                                                </div>
+                                            <div className='flex row space-x-1'>
                                                 <div className='w-3/6'>
                                                     <Input
-                                                        type="number"
+                                                        label="Email:"
+                                                        labelPlacement="outside-left"
+                                                        value={transactionRelatedUserField.inputField!}
+                                                        onChange={(e) => { handleInputChangeSearch(e, transactionRelatedUserField.id); handleInputFieldChange(e, transactionRelatedUserField.id) }}
+                                                        size='sm'
+                                                    />
+                                                    {suggestions.length > 0 && focusedFieldId === transactionRelatedUserField.id && ( // Show suggestions only for the focused field
+                                                        <ul className="max-w-4/6 mt-2 bg-white border border-gray-300 rounded">
+                                                            {suggestions.map((user) => (
+                                                                <li
+                                                                    key={user.id}
+                                                                    className="p-2 cursor-pointer border-b border-gray-200 hover:bg-gray-100"
+                                                                    onClick={() => handleSuggestionClick(user, transactionRelatedUserField.id)}
+                                                                >
+                                                                    {user.email}
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    )}
+                                                </div>
+                                                <div className='w-2/6'>
+                                                    <Input
+                                                        size='sm'
                                                         label="Share:"
                                                         labelPlacement="outside-left"
                                                         value={transactionRelatedUserField.amount.toString()} // Ensure value is a string for the input
@@ -354,19 +354,40 @@ export default function CreateTransactionModal() {
                                                         variant="bordered"
                                                     />
                                                 </div>
-                                                <Button
-                                                    onClick={() => removeTransactionRelatedUserField(transactionRelatedUserField.id)}
-                                                    isIconOnly
-                                                    color={index === 0 ? "default" : "danger"} // Change color based on index
-                                                    aria-label="Remove User"
-                                                    disabled={index === 0} // Disable the button if it's the first field
-                                                >
-                                                    <XIcon size={undefined} height={undefined} width={undefined} />
-                                                </Button>
+
+                                                <div style={{ alignItems: 'center' }}>
+                                                    <div className='flex flex-row justify-center items-center'>
+                                                        <span className="text-sm" style={{ marginRight: '8px' }}>Paid:</span>
+                                                        <Switch isSelected={transactionRelatedUserField.paid} onValueChange={() => handleChange(transactionRelatedUserField.id, 'paid', !transactionRelatedUserField.paid)} defaultSelected color="secondary" />
+                                                    </div>
+                                                </div>
+                                                <div className='items-center justify-center'>
+                                                    <Button
+                                                        onClick={() => removeTransactionRelatedUserField(transactionRelatedUserField.id)}
+                                                        isIconOnly
+                                                        aria-label="Remove User"
+                                                        disabled={index === 0} // Disable the button if it's the first field
+                                                        style={{ backgroundColor: 'white', border: 'none', padding: "0px" }} // Set background color to white
+                                                        size='sm'
+
+                                                    >
+                                                        <XIcon className={index === 0 ? "text-gray-400" : "text-red-400"} size={18} height={undefined} width={undefined} />
+
+                                                    </Button>
+                                                </div>
+
                                             </div>
                                         </div>
                                     ))}
-                                    <Button onClick={addTransactionRelatedUserField} color="primary">+</Button>
+                                    <Button
+                                        size="md"
+                                        onClick={addTransactionRelatedUserField}
+                                        color="secondary"
+                                        className="p-0 m-0"
+                                    >
+                                        +
+                                    </Button>
+
                                 </div>
                                 <div className='text-center text-xl'>
                                     Total share per user: {transaction.amount / transactionRelatedUserFields.length}
