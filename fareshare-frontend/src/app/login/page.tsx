@@ -49,6 +49,7 @@ const Login = () => {
             if (axios.isAxiosError(err) && err.response) {
                 setError(err.response.data.error || 'Login failed');
             } else {
+                console.log(err)
                 setError('An unexpected error occurred');
             }
         }
