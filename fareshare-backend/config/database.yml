@@ -16,9 +16,10 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: 5
-  username: <%= ENV["DATABASE_USERNAME"] %>       # replace with your PostgreSQL username 
-  password: <%= ENV["DATABASE_PASSWORD"] %>   # replace with your PostgreSQL password 
-  host: <%= ENV["BACKEND_DATABASE_URL"] %>
+  # username: <%= ENV["DATABASE_USERNAME"] %>       # replace with your PostgreSQL username 
+  # password: <%= ENV["DATABASE_PASSWORD"] %>   # replace with your PostgreSQL password 
+  # host: <%= ENV["BACKEND_DATABASE_URL"] %>
+  url: <%= ENV["BACKEND_DATABASE_URL"] %>
   port: 5432
 
 
