@@ -25,7 +25,14 @@ default: &default
 
 
 development:
-  <<: *default
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+  username: db_n2lf_user
+  password: BBbae892uDkYuF5iHmuJrNk5RofHVN2w
+  host: dpg-csb2bhjtq21c7396no50-a.oregon-postgres.render.com
+  # url: <%= ENV["BACKEND_DATABASE_URL"] %>
+  port: 5432
   database: fareshare
 
   # The specified database role being used to connect to PostgreSQL.
@@ -59,7 +66,14 @@ development:
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
-  <<: *default
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+  username: db_n2lf_user
+  password: BBbae892uDkYuF5iHmuJrNk5RofHVN2w
+  host: dpg-csb2bhjtq21c7396no50-a.oregon-postgres.render.com
+  # url: <%= ENV["BACKEND_DATABASE_URL"] %>
+  port: 5432
   database: fareshare
 
 # As with config/credentials.yml, you never want to store sensitive information,
@@ -83,6 +97,13 @@ test:
 # for a full overview on how database connection configuration can be specified.
 #
 production:
-  <<: *default
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+  username: db_n2lf_user
+  password: BBbae892uDkYuF5iHmuJrNk5RofHVN2w
+  host: dpg-csb2bhjtq21c7396no50-a.oregon-postgres.render.com
+  # url: <%= ENV["BACKEND_DATABASE_URL"] %>
+  port: 5432
   database: fareshare
 
