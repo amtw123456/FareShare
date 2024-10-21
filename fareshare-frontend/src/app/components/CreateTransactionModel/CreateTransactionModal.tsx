@@ -260,7 +260,7 @@ export default function CreateTransactionModal() {
                 isOpen={isOpen}
                 onOpenChange={onOpenChange}
                 placement="top-center"
-            // size={"xl"}
+                size={"lg"}
             >
                 <ModalContent>
                     {(onClose) => (
@@ -268,43 +268,64 @@ export default function CreateTransactionModal() {
                             <ModalHeader className="flex flex-col gap-1">
                                 Create a Transaction Entry
                             </ModalHeader>
-                            <ModalBody style={{ maxHeight: '400px', overflowY: 'auto' }}>
+                            <ModalBody style={{ maxHeight: '500px', overflowY: 'auto' }}>
                                 {/* Transaction Entry Inputs */}
                                 <Input
                                     placeholder="Enter your transaction entry title"
+                                    label="Title"
+                                    labelPlacement="outside"
                                     variant="bordered"
                                     value={transaction.title}
                                     onChange={(e) => handleInputChangeTransactionEntry('title', e.target.value)}
                                 />
                                 <Textarea
                                     variant="bordered"
+                                    label="Description"
                                     labelPlacement="outside"
                                     placeholder="Enter your transaction entry description"
                                     value={transaction.description}
                                     onChange={(e) => handleInputChangeTransactionEntry('description', e.target.value)}
                                     className="max-w"
                                 />
-                                <div className="bg-white-700 mx-auto my-5 w-[98%] h-[280px]">
+                                <div className="mx-auto my-5 w-[98%] h-[250px] shrink-0">
                                     <Map posix={[14.598202469575067, 120.97252843149849]} />
                                 </div>
-                                <Input
-                                    type="number"
-                                    placeholder="Enter your transaction entry amount"
-                                    variant="bordered"
-                                    value={transaction.amount.toString()}
-                                    onChange={(e) => handleInputChangeTransactionEntry('amount', parseFloat(e.target.value) || 0)}
-                                />
+
+                                <div className='flex flex-row space-x-2'>
+                                    <Input
+                                        type="number"
+                                        label="Amount:"
+                                        labelPlacement="outside-left"
+                                        placeholder="Enter your transaction entry amount"
+                                        variant="bordered"
+                                        value={transaction.amount.toString()}
+                                        onChange={(e) => handleInputChangeTransactionEntry('amount', parseFloat(e.target.value) || 0)}
+                                    />
+                                    <Input
+                                        type="number"
+                                        isReadOnly={true}
+                                        label="Participants:"
+                                        labelPlacement="outside-left"
+                                        placeholder="Number of related Users"
+                                        variant="bordered"
+                                        value={String(transactionRelatedUserFields.length)}
+                                        onChange={(e) => handleInputChangeTransactionEntry('amount', parseFloat(e.target.value) || 0)}
+                                        className='focus:outline-none'
+                                    />
+                                </div>
 
                                 {/* Related Users Section */}
                                 <div className='flex flex-col justify-center items-center'>
-                                    <span>Related Users</span>
+                                    <span className='mb-4'>Related Users</span>
                                     {transactionRelatedUserFields.map((transactionRelatedUserField, index) => (
                                         <div key={transactionRelatedUserField.id} style={{ marginBottom: '1rem', display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                                            <div className='flex flex-row space-x-2'>
-                                                <div className='w-4/6'>
+                                            <div className='flex flex-row space-x-1'>
+                                                <div className='w-5/6'>
                                                     <div>
                                                         <Input
-                                                            placeholder="Enter an email or username..."
+                                                            placeholder="Enter an email"
+                                                            label="Email:"
+                                                            labelPlacement="outside-left"
                                                             value={transactionRelatedUserField.inputField!}
                                                             onChange={(e) => { handleInputChangeSearch(e, transactionRelatedUserField.id); handleInputFieldChange(e, transactionRelatedUserField.id) }}
                                                         />
@@ -323,10 +344,11 @@ export default function CreateTransactionModal() {
                                                         )}
                                                     </div>
                                                 </div>
-                                                <div className='w-2/6'>
+                                                <div className='w-3/6'>
                                                     <Input
                                                         type="number"
-                                                        placeholder="Enter amount"
+                                                        label="Share:"
+                                                        labelPlacement="outside-left"
                                                         value={transactionRelatedUserField.amount.toString()} // Ensure value is a string for the input
                                                         onChange={(event) => handleChange(transactionRelatedUserField.id, 'amount', event.target.value)}
                                                         variant="bordered"

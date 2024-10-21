@@ -169,9 +169,7 @@ const TransactionEntryCard: React.FC<TransactionEntryCardProps> = ({ transaction
                                                 <TableCell>{parseFloat(String(relatedUsers[index].amount)).toFixed(2)}</TableCell>
                                                 <TableCell>{relatedUsers[index].paid ? "Yes" : "No"}</TableCell>
                                             </TableRow>
-
                                         ))}
-
                                     </TableBody>
                                 </Table>
                             ) : (
