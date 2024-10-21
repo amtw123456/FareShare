@@ -11,6 +11,7 @@ import "leaflet-defaulticon-compatibility";
 interface MapProps {
     posix: LatLngExpression | LatLngTuple,
     zoom?: number,
+    onPositionChange?: (newPosition: LatLngTuple) => void; // Optional callback
 }
 
 const defaults = {
@@ -27,7 +28,9 @@ const Map = (props: MapProps) => {
             click: (event) => {
                 const { lat, lng } = event.latlng; // Get the latitude and longitude
                 setMarkerPosition([lat, lng]); // Update marker position
-                console.log(lat, lng)
+                if (props.onPositionChange) {
+                    props.onPositionChange([lat, lng]); // Call the provided callback
+                }
             },
         });
 

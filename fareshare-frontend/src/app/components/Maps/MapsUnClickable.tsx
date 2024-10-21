@@ -10,6 +10,7 @@ import "leaflet-defaulticon-compatibility";
 interface MapProps {
     posix: LatLngExpression | LatLngTuple,
     zoom?: number,
+    
 }
 
 const defaults = {
