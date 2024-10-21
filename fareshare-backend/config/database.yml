@@ -18,7 +18,7 @@ default: &default
   pool: 5
   username: postgres       # replace with your PostgreSQL username
   password: password     # replace with your PostgreSQL password
-  host: localhost
+  host: <%= ENV["DATABASE_URL"] %>
   port: 5432
 
 development:
