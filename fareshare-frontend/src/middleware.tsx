@@ -6,6 +6,10 @@ export async function middleware(request: NextRequest) {
     // Define paths that should be protected
     const protectedPaths = ['/profile', '/dashboard', '/home'];
 
+    if (request.nextUrl.pathname === '/') {
+        return NextResponse.redirect(new URL('/login', request.url)); // Redirect to login
+    }
+
     // Check if the user is trying to access a protected route
     if (protectedPaths.some(path => request.nextUrl.pathname.startsWith(path))) {
         if (!token) {
@@ -25,5 +29,5 @@ export async function middleware(request: NextRequest) {
 
 // Apply middleware only to these routes
 export const config = {
-    matcher: ['/login', '/signup', '/profile', '/dashboard', '/home'], // Specify routes to protect
+    matcher: ['/login', '/signup', '/profile', '/dashboard', '/home', '/'], // Specify routes to protect
 };
