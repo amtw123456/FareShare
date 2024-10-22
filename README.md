@@ -1,11 +1,15 @@
 # FareShare
 This repository contains a code for a web application for bill splitting
 
-## The application is currently deployed online with a working backend and database the link fare-share-orpin.vercel.app
+## The application is currently deployed online with a working backend and database the link 
+### https://fare-share-orpin.vercel.app/home
 
-## Frontend Tech Stack: Next.js, NextUI, Tailwind (Deployed on Vercel)
-## Backend Tech Stack: Ruby on Rails (Deployed on Render)
-## Database: PostgreSQL (Deployed on Render)
+## Frontend Tech Stack:
+### Next.js, NextUI, Tailwind (Deployed on Vercel)
+## Backend Tech Stack:
+### Ruby on Rails (Deployed on Render)
+## Database:
+### PostgreSQL (Deployed on Render)
 
 Setup for setting up on your local development environment
 
@@ -91,7 +95,7 @@ default: &default
   port: 5432
 ```
 
-Note that you have to have a postgreSQL application installed and PG admin to be able to a local server of your postgreSQL database
+Note that you have to have a postgreSQL application installed and PG admin to be able to connect to a local server of your postgreSQL database in your computer
 
 # 9. Create the database and migrate the models
 Once you have connected your postgreSQL local server to your ruby on rails application type the following commands to the root directory of your backend application
