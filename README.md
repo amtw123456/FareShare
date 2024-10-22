@@ -1,9 +1,11 @@
 # FareShare
 This repository contains a code for a web application for bill splitting
 
-Frontend Tech Stack: Next.js, NextUI, Tailwind
-Backend Tech Stack: Ruby on Rails
-Database: PostgreSQL
+## The application is currently deployed online with a working backend and database the link fare-share-orpin.vercel.app
+
+## Frontend Tech Stack: Next.js, NextUI, Tailwind (Deployed on Vercel)
+## Backend Tech Stack: Ruby on Rails (Deployed on Render)
+## Database: PostgreSQL (Deployed on Render)
 
 Setup for setting up on your local development environment
 
