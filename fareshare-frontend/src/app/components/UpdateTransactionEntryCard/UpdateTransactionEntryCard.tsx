@@ -11,6 +11,7 @@ import {
     Textarea,
     Switch,
     Card,
+    Spinner,
 } from "@nextui-org/react";
 import axios from 'axios';
 import { XIcon } from './base/XIcon';
@@ -71,6 +72,7 @@ const UpdateTransactionEntryCard: React.FC<UpdateTransactionEntryCardProps> = ({
     const [originalUserCounter, setOriginalUserCounter] = useState<number | null>(users.length);
     const [relatedUserIdsToDelete, setRelatedUserIdsToDelete] = useState<number[]>([]);
     const [hasComponentRendered, setHasComponentRendered] = useState<Boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false); // Loading state
     const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
     const handleEditClick = (value: boolean) => {
         isSetEditBooleanProps(value); // Set isEdit to true when the button is clicked
@@ -201,6 +203,7 @@ const UpdateTransactionEntryCard: React.FC<UpdateTransactionEntryCardProps> = ({
 
 
     const handleUpdateSubmit = async () => {
+        setLoading(true)
         try {
             const postTransactionResponse = await axios.put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/transaction_entries/${transaction.id}`, {
                 transaction_entry: {
@@ -277,6 +280,8 @@ const UpdateTransactionEntryCard: React.FC<UpdateTransactionEntryCardProps> = ({
             })
 
             setIsRefreshTransactionEntries(true)
+            handleEditClick(false)
+            setLoading(false)
 
         } catch (err) {
             if (axios.isAxiosError(err) && err.response) {
@@ -488,11 +493,15 @@ const UpdateTransactionEntryCard: React.FC<UpdateTransactionEntryCardProps> = ({
                 <Button
                     size="md"
                     // onClick={handleUpdateSubmit}
-                    onClick={() => { handleUpdateSubmit(); handleEditClick(false) }}
+                    onClick={() => { handleUpdateSubmit() }}
                     color="warning"
                     className="p-0 m-0"
                 >
-                    Update
+                    {loading ? ( // Show loading state
+                        <Spinner size={'sm'} color={'warning'} />
+                    ) : (
+                        <span>Update</span>
+                    )}
                 </Button>
             </div>
         </Card>

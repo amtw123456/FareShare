@@ -73,8 +73,6 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({ setIsRe
     const [suggestions, setSuggestions] = useState<User[]>([]);
     const [isSuggestionClicked, setIsSuggestionClicked] = useState<boolean>(false); // Track clicks on suggestions
 
-    const router = useRouter(); // Initialize router
-
     // Handlers
     const handleInputChangeTransactionEntry = (field: keyof TransactionEntry, value: string | number) => {
         setTransaction(prev => ({ ...prev, [field]: value }));
