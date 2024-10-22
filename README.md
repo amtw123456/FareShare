@@ -11,8 +11,9 @@ This repository contains a code for a web application for bill splitting
 ## Database:
 ### PostgreSQL (Deployed on Render)
 
-<pre>
-<pre>
+<br />
+<br />
+
 ## Setup for setting up on your local development environment
 
 # 1. Clone the Repository
