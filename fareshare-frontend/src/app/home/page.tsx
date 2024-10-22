@@ -29,6 +29,7 @@ const Home = () => {
     const { token, userId } = useAuth(); // Use your authentication context
     const [transactionEntries, setTransactionEntries] = useState<TransactionEntry[]>([]); // State to hold transaction entries
     const [loading, setLoading] = useState<boolean>(true); // Loading state
+    const [isTransactionEntryCreated, setIsTransactionEntryCreated] = useState<boolean>(false); // State to track if button is pressed
 
     // Function to fetch transaction entries
     const fetchTransactionEntries = async () => {
@@ -56,12 +57,21 @@ const Home = () => {
         }
     }, [userId]);
 
+    useEffect(() => {
+        fetchTransactionEntries();
+
+    }, [isTransactionEntryCreated]);
+
+    useEffect(() => {
+        setIsTransactionEntryCreated(false)
+    }, [transactionEntries]);
+
     return (
         <div className="flex flex-col min-h-screen bg-gray-100 text-gray-900">
             <NavigationBar />
             <div className='flex justify-center mt-5'>
                 <div className='flex flex-col justify-center items-center'>
-                    <CreateTransactionModal />
+                    <CreateTransactionModal setIsTransactionEntryCreated={setIsTransactionEntryCreated} />
                     <div className='mt-5 space-y-4'>
                         {loading ? ( // Show loading state
                             <CircularProgress color={'secondary'} label="Loading transaction entries" />

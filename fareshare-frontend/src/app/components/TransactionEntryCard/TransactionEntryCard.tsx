@@ -270,7 +270,7 @@ const TransactionEntryCard: React.FC<TransactionEntryCardProps> = ({ transaction
                                                         <TableRow key={relatedUser.id}>
                                                             <TableCell>{user.email}</TableCell>
                                                             <TableCell>{user.user_name}</TableCell>
-                                                            <TableCell>{parseFloat(String(relatedUser.amount)).toFixed(2)}</TableCell>
+                                                            <TableCell>₱{parseFloat(String(relatedUser.amount)).toFixed(2)}</TableCell>
                                                             <TableCell>{relatedUser.paid ? "Yes" : "No"}</TableCell>
                                                         </TableRow>
                                                     ))

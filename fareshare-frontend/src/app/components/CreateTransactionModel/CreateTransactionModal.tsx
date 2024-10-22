@@ -10,12 +10,14 @@ import {
     Input,
     Textarea,
     Switch,
+    Spinner,
 } from "@nextui-org/react";
 import axios from 'axios';
 import { XIcon } from './base/XIcon';
 import { useAuth } from '@/app/context/AuthContext';
 import dynamic from 'next/dynamic';
 import { LatLngExpression, LatLngTuple } from 'leaflet';
+import { useRouter } from 'next/navigation';
 
 interface TransactionEntry {
     title: string;
@@ -46,11 +48,15 @@ interface MapProps {
     zoom?: number,
 }
 
-export default function CreateTransactionModal() {
+interface CreateTransactionModalProps {
+    setIsTransactionEntryCreated: (isCreated: boolean) => void; // Prop to track button pressed
+}
+
+const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({ setIsTransactionEntryCreated }) => {
     const { token, userId, userEmail, tokenExpiry, setToken, setUserId, setUserEmail, setTokenExpiry } = useAuth();
     const [mapPosition, setMapPosition] = useState<[number, number]>([14.598202469575067, 120.97252843149849]);
     const [focusedFieldId, setFocusedFieldId] = useState<number | null>(null);
-
+    const [loading, setLoading] = useState<boolean>(false); // Loading state
 
     const [transaction, setTransaction] = useState<TransactionEntry>({
         title: '',
@@ -66,6 +72,8 @@ export default function CreateTransactionModal() {
     const [query, setQuery] = useState<string>('');
     const [suggestions, setSuggestions] = useState<User[]>([]);
     const [isSuggestionClicked, setIsSuggestionClicked] = useState<boolean>(false); // Track clicks on suggestions
+
+    const router = useRouter(); // Initialize router
 
     // Handlers
     const handleInputChangeTransactionEntry = (field: keyof TransactionEntry, value: string | number) => {
@@ -160,8 +168,8 @@ export default function CreateTransactionModal() {
     };
 
 
-    const handleSubmit = async () => {
-
+    const handleCreateSubmit = async (onClose: () => void) => {
+        setLoading(true)
         try {
             const postTransactionResponse = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/transaction_entries`, {
                 transaction_entry: {
@@ -201,7 +209,13 @@ export default function CreateTransactionModal() {
                 }
             })
 
+
+            setLoading(false)
+            setIsTransactionEntryCreated(true)
+            onClose()
+
         } catch (err) {
+            setLoading(false)
             if (axios.isAxiosError(err) && err.response) {
                 console.log(err.response.data.error || 'Transaction creation failed');
             } else {
@@ -415,8 +429,13 @@ export default function CreateTransactionModal() {
                                 <Button color="danger" variant="flat" onPress={onClose}>
                                     Close
                                 </Button>
-                                <Button color="primary" onPress={handleSubmit}>
-                                    Create
+
+                                <Button color="primary" onPress={() => { handleCreateSubmit(onClose); }}>
+                                    {loading ? ( // Show loading state
+                                        <Spinner size={'sm'} color={'warning'} />
+                                    ) : (
+                                        <span>Create</span>
+                                    )}
                                 </Button>
                             </ModalFooter>
                         </>
@@ -426,3 +445,5 @@ export default function CreateTransactionModal() {
         </>
     );
 }
+
+export default CreateTransactionModal
