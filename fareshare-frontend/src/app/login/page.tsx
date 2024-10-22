@@ -84,7 +84,7 @@ const Login = () => {
                     </div>
                     <div className="mt-12 flex flex-col items-center">
                         <h1 className="text-2xl xl:text-3xl font-extrabold">
-                            Login to Link
+                            Login to FareShare
                         </h1>
                         <div className="w-full flex-1 mt-8">
                             {/* {error && <div className="text-red-500">{error}</div>} */}
