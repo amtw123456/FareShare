@@ -373,7 +373,7 @@ const UpdateTransactionEntryCard: React.FC<UpdateTransactionEntryCardProps> =
         };
 
         return (
-            <Card className="bg-white w-[500px] px-4 py-2">
+            <Card className="bg-white max-[700px] px-4 py-2">
                 <Input
                     placeholder="Enter your transaction entry title"
                     label="Title"
