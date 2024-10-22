@@ -46,7 +46,7 @@ class TransactionEntriesController < ApplicationController
 
   # GET /transaction_entries/user/:user_id
   def transactions_by_user
-    @transactions = TransactionEntry.where(user_id: params[:user_id])
+    @transactions = TransactionEntry.where(user_id: params[:user_id]).order(created_at: :desc)
 
     if @transactions.present?
       render json: @transactions
