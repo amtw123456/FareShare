@@ -26,6 +26,7 @@ const Profile = () => {
     const [transactionEntries, setTransactionEntries] = useState<TransactionEntry[]>([]); // State to hold transaction entries
     const [loading, setLoading] = useState<boolean>(true); // Loading state
 
+
     // Function to fetch transaction entries
     const fetchTransactionEntries = async () => {
         console.log(userId)
@@ -63,7 +64,9 @@ const Profile = () => {
                             <CircularProgress color={'secondary'} label="Loading transaction entries" />
                         ) : (
                             transactionEntries.map((transactionEntry) => (
-                                <TransactionEntryCard key={transactionEntry.id} transactionEntry={transactionEntry} showDropDownSettings={true} />
+                                <>
+                                    <TransactionEntryCard key={transactionEntry.id} transactionEntry={transactionEntry} showDropDownSettings={true} />
+                                </>
                             ))
                         )}
                     </div>

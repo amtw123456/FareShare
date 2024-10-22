@@ -27,6 +27,7 @@ import { EllipsisIcon } from "./base/EllipsisIcon";
 
 import { DeleteDocumentIcon } from "./base/DeleteDocumentIcon";
 import { EditDocumentIcon } from "./base/EditDocumentIcon";
+import UpdateTransactionEntryCard from "../UpdateTransactionEntryCard/UpdateTransactionEntryCard"
 
 interface TransactionEntry {
     id: number;
@@ -39,11 +40,24 @@ interface TransactionEntry {
     long: number;
 }
 
+// interface TransactionRelatedUser {
+//     user_id: number;
+//     email: string;
+//     amount: number;
+//     paid: boolean;
+
+
+// }
+
 interface TransactionRelatedUser {
-    user_id: number;
-    email: string;
-    amount: number;
+    id: number;
     paid: boolean;
+    email: string | null;
+    amount: number;
+    inputField: string | null
+    user_id: number;
+    transaction_entry_id: number;
+
 }
 
 interface User {
@@ -55,15 +69,25 @@ interface User {
 interface TransactionEntryCardProps {
     transactionEntry: TransactionEntry;
     showDropDownSettings: boolean;
+
 }
+
 
 const TransactionEntryCard: React.FC<TransactionEntryCardProps> = ({ transactionEntry, showDropDownSettings }) => {
     const { token } = useAuth();
     const [loading, setLoading] = useState(true);
-    const [relatedUsers, setRelatedUsers] = useState<TransactionRelatedUser[]>([]);
     const [usersDetails, setUsersDetails] = useState<User[]>([]);
+    const [relatedUsers, setRelatedUsers] = useState<TransactionRelatedUser[]>([]);
     const [transactionCardOwnerName, setTransactionCardOwnerName] = useState<String | null>();
 
+    const [isEdit, setIsEdit] = useState<Boolean>(false);
+
+
+    const handleEditClick = (value: boolean) => {
+        setIsEdit(value); // Set isEdit to true when the button is clicked
+    };
+
+    const iconClasses = "text-xl text-default-500 pointer-events-none flex-shrink-0";
 
     const Map = useMemo(() => dynamic(
         () => import('../Maps/MapsUnClickable'),
@@ -104,7 +128,7 @@ const TransactionEntryCard: React.FC<TransactionEntryCardProps> = ({ transaction
                         }
                     });
 
-
+                // console.log(response.data)
                 setRelatedUsers(response.data); // Set the related users state
             } catch (error) {
                 console.error("Error fetching related users:", error);
@@ -143,6 +167,7 @@ const TransactionEntryCard: React.FC<TransactionEntryCardProps> = ({ transaction
         if (relatedUsers.length !== 0) {
             fetchUsersByIds(userIds);
         }
+
     }, [relatedUsers]);
 
     useEffect(() => {
@@ -156,112 +181,121 @@ const TransactionEntryCard: React.FC<TransactionEntryCardProps> = ({ transaction
 
     }, [usersDetails]);
 
-    const iconClasses = "text-xl text-default-500 pointer-events-none flex-shrink-0";
-
-
     return (
         loading ? ( // Show skeleton while loading
             <Skeleton className="w-[500px] h-[400px]" /> // Adjust dimensions as necessary
-        ) : (
-            transactionCardOwnerName && ( // Check if transactionCardOwnerName is set
-                <Card className="w-[500px]">
-                    <CardHeader className="flex justify-between items-center gap-3">
-                        <div className="flex gap-3 items-center">
-                            <Avatar showFallback src='https://images.unsplash.com/broken' />
-                            <div className="flex flex-col">
-                                <p className="text-md">{transactionCardOwnerName}</p>
-                                <p className="text-small text-default-500">
-                                    {new Date(transactionEntry.created_at).toLocaleString('default', {
-                                        year: 'numeric',
-                                        month: 'long',
-                                        day: 'numeric',
-                                        hour: '2-digit',
-                                        minute: '2-digit',
-                                        second: '2-digit',
-                                        hour12: true // Set to false for 24-hour format
-                                    })}
-                                </p>
+        ) :
+            (
+                transactionCardOwnerName && !isEdit ? ( // Check if transactionCardOwnerName is set
+                    <Card className="w-[500px]">
+                        <CardHeader className="flex justify-between items-center gap-3">
+                            <div className="flex gap-3 items-center">
+                                <Avatar showFallback src='https://images.unsplash.com/broken' />
+                                <div className="flex flex-col">
+                                    <p className="text-md">{transactionCardOwnerName}</p>
+                                    <p className="text-small text-default-500">
+                                        {new Date(transactionEntry.created_at).toLocaleString('default', {
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: 'numeric',
+                                            hour: '2-digit',
+                                            minute: '2-digit',
+                                            second: '2-digit',
+                                            hour12: true // Set to false for 24-hour format
+                                        })}
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                        <div>
-                            {showDropDownSettings && (
-                                <Dropdown>
-                                    <DropdownTrigger>
-                                        <Button isIconOnly className="bg-color-white">
-                                            <EllipsisIcon size={undefined} height={undefined} width={undefined} label={undefined} />
-                                        </Button>
-                                    </DropdownTrigger>
-                                    <DropdownMenu variant="faded" aria-label="Dropdown menu with icons">
-                                        <DropdownItem
-                                            key="edit"
-                                            startContent={<EditDocumentIcon className={iconClasses} />}
-                                        >
-                                            Edit file
-                                        </DropdownItem>
-                                        <DropdownItem
-                                            key="delete"
-                                            className="text-danger"
-                                            startContent={<DeleteDocumentIcon className={cn(iconClasses, "text-danger")} />}
-                                            onClick={deleteTransactionEntry}
-                                        >
-                                            Delete file
-                                        </DropdownItem>
-                                    </DropdownMenu>
-                                </Dropdown>
-                            )}
-                        </div>
-                    </CardHeader>
+                            <div>
+                                {showDropDownSettings && (
+                                    <Dropdown>
+                                        <DropdownTrigger>
+                                            <Button isIconOnly className="bg-color-white">
+                                                <EllipsisIcon size={undefined} height={undefined} width={undefined} label={undefined} />
+                                            </Button>
+                                        </DropdownTrigger>
+                                        <DropdownMenu variant="faded" aria-label="Dropdown menu with icons">
+                                            <DropdownItem
+                                                key="edit"
+                                                startContent={<EditDocumentIcon className={iconClasses} />}
+                                                onClick={() => handleEditClick(!isEdit)}
+                                            >
+                                                Edit file
+                                            </DropdownItem>
 
-                    <Divider />
-                    <CardBody className="px-0 flex flex-col">
-                        <div className="text-center font-bold text-xl">
-                            <p className="px-2">{transactionEntry.title}</p>
-                        </div>
-                        <p className="px-2 text-justify">{transactionEntry.description}</p>
+                                            <DropdownItem
+                                                key="delete"
+                                                className="text-danger"
+                                                startContent={<DeleteDocumentIcon className={cn(iconClasses, "text-danger")} />}
+                                                onClick={deleteTransactionEntry}
+                                            >
+                                                Delete file
+                                            </DropdownItem>
+                                        </DropdownMenu>
+                                    </Dropdown>
+                                )}
+                            </div>
+                        </CardHeader>
+
                         <Divider />
-                        <div className="bg-white-700 px-2 mx-auto my-5 w-[98%] h-[280px]">
-                            <Map posix={[transactionEntry.lat, transactionEntry.long]} />
-                        </div>
+                        <CardBody className="px-0 flex flex-col">
+                            <div className="text-center font-bold text-xl">
+                                <p className="px-2">{transactionEntry.title}</p>
+                            </div>
+                            <p className="px-2 text-justify">{transactionEntry.description}</p>
+                            <Divider />
+                            <div className="bg-white-700 px-2 mx-auto my-5 w-[98%] h-[280px]">
+                                <Map posix={[transactionEntry.lat, transactionEntry.long]} />
+                            </div>
+                            <Divider />
+                            <div className="px-2 py-2">
+                                {relatedUsers.length > 0 ? ( // Check if relatedUsers is not empty
+                                    <Table
+                                        removeWrapper
+                                        color={"secondary"}
+                                        selectionMode="single"
+                                        aria-label="Transaction users table"
+                                    >
+                                        <TableHeader>
+                                            <TableColumn>Email</TableColumn>
+                                            <TableColumn>Username</TableColumn>
+                                            <TableColumn>Amount</TableColumn>
+                                            <TableColumn>Paid</TableColumn>
+                                        </TableHeader>
+                                        <TableBody>
+                                            {relatedUsers.flatMap((relatedUser) =>
+                                                usersDetails
+                                                    .filter(user => relatedUser.user_id === user.id) // Check for matching user_id
+                                                    .map(user => ( // Directly use user from the filtered result
+                                                        <TableRow key={relatedUser.id}>
+                                                            <TableCell>{user.email}</TableCell>
+                                                            <TableCell>{user.user_name}</TableCell>
+                                                            <TableCell>{parseFloat(String(relatedUser.amount)).toFixed(2)}</TableCell>
+                                                            <TableCell>{relatedUser.paid ? "Yes" : "No"}</TableCell>
+                                                        </TableRow>
+                                                    ))
+                                            )}
+
+                                        </TableBody>
+                                    </Table>
+                                ) : (
+                                    <p>No related users found.</p> // Message when there are no related users
+                                )}
+                            </div>
+                        </CardBody>
                         <Divider />
-                        <div className="px-2 py-2">
-                            {relatedUsers.length > 0 ? ( // Check if relatedUsers is not empty
-                                <Table
-                                    removeWrapper
-                                    color={"secondary"}
-                                    selectionMode="single"
-                                    aria-label="Transaction users table"
-                                >
-                                    <TableHeader>
-                                        <TableColumn>Email</TableColumn>
-                                        <TableColumn>Username</TableColumn>
-                                        <TableColumn>Amount</TableColumn>
-                                        <TableColumn>Paid</TableColumn>
-                                    </TableHeader>
-                                    <TableBody>
-                                        {usersDetails.map((user, index) => (
-                                            <TableRow key={index}>
-                                                <TableCell>{user.email}</TableCell>
-                                                <TableCell>{user.user_name}</TableCell>
-                                                <TableCell>{parseFloat(String(relatedUsers[index].amount)).toFixed(2)}</TableCell>
-                                                <TableCell>{relatedUsers[index].paid ? "Yes" : "No"}</TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            ) : (
-                                <p>No related users found.</p> // Message when there are no related users
-                            )}
-                        </div>
-                    </CardBody>
-                    <Divider />
-                    <CardFooter className="px-2 flex justify-center">
-                        <p className="flex justify-center items-center">
-                            Total Transaction Amount: ₱{parseFloat(String(transactionEntry.amount)).toFixed(2)}
-                        </p>
-                    </CardFooter>
-                </Card>
+                        <CardFooter className="px-2 flex justify-center">
+                            <p className="flex justify-center items-center">
+                                Total Transaction Amount: ₱{parseFloat(String(transactionEntry.amount)).toFixed(2)}
+                            </p>
+                        </CardFooter>
+                    </Card>
+                ) : (
+                    <>
+                        <UpdateTransactionEntryCard transactionEntryProps={transactionEntry} isEditBooleanProps={isEdit} isSetEditBooleanProps={setIsEdit} transactionRelatedUser={relatedUsers} users={usersDetails} />
+                    </>
+                )
             )
-        )
     );
 
 };
