@@ -69,11 +69,12 @@ interface User {
 interface TransactionEntryCardProps {
     transactionEntry: TransactionEntry;
     showDropDownSettings: boolean;
+    setIsRefreshTransactionEntries: (isCreated: boolean) => void; // Prop to track button pressed
 
 }
 
 
-const TransactionEntryCard: React.FC<TransactionEntryCardProps> = ({ transactionEntry, showDropDownSettings }) => {
+const TransactionEntryCard: React.FC<TransactionEntryCardProps> = ({ transactionEntry, showDropDownSettings, setIsRefreshTransactionEntries }) => {
     const { token } = useAuth();
     const [loading, setLoading] = useState(true);
     const [usersDetails, setUsersDetails] = useState<User[]>([]);
@@ -107,10 +108,7 @@ const TransactionEntryCard: React.FC<TransactionEntryCardProps> = ({ transaction
                 }
             });
 
-            if (response.status === 200) {
-                console.log("Transaction entry deleted successfully:", response.data);
-                return response.data; // Optionally return the response data if needed
-            }
+            setIsRefreshTransactionEntries(true)
         } catch (error) {
             console.error("Error deleting transaction entry:", error);
         }
@@ -292,7 +290,7 @@ const TransactionEntryCard: React.FC<TransactionEntryCardProps> = ({ transaction
                     </Card>
                 ) : (
                     <>
-                        <UpdateTransactionEntryCard transactionEntryProps={transactionEntry} isEditBooleanProps={isEdit} isSetEditBooleanProps={setIsEdit} transactionRelatedUser={relatedUsers} users={usersDetails} />
+                        <UpdateTransactionEntryCard transactionEntryProps={transactionEntry} isEditBooleanProps={isEdit} isSetEditBooleanProps={setIsEdit} transactionRelatedUser={relatedUsers} users={usersDetails} setIsRefreshTransactionEntries={setIsRefreshTransactionEntries} />
                     </>
                 )
             )

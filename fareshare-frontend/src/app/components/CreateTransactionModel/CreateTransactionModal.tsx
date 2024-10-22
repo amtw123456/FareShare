@@ -49,10 +49,10 @@ interface MapProps {
 }
 
 interface CreateTransactionModalProps {
-    setIsTransactionEntryCreated: (isCreated: boolean) => void; // Prop to track button pressed
+    setIsRefreshTransactionEntries: (isCreated: boolean) => void; // Prop to track button pressed
 }
 
-const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({ setIsTransactionEntryCreated }) => {
+const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({ setIsRefreshTransactionEntries }) => {
     const { token, userId, userEmail, tokenExpiry, setToken, setUserId, setUserEmail, setTokenExpiry } = useAuth();
     const [mapPosition, setMapPosition] = useState<[number, number]>([14.598202469575067, 120.97252843149849]);
     const [focusedFieldId, setFocusedFieldId] = useState<number | null>(null);
@@ -211,7 +211,7 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({ setIsTr
 
 
             setLoading(false)
-            setIsTransactionEntryCreated(true)
+            setIsRefreshTransactionEntries(true)
             onClose()
 
         } catch (err) {

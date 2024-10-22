@@ -56,13 +56,14 @@ interface TransactionRelatedUser {
 interface UpdateTransactionEntryCardProps {
     transactionEntryProps: TransactionEntry
     isEditBooleanProps: Boolean
-    isSetEditBooleanProps: (value: boolean) => void; // Add setEdit prop
+    isSetEditBooleanProps: (value: boolean) => void;
     transactionRelatedUser: TransactionRelatedUser[];
     users: User[]
+    setIsRefreshTransactionEntries: (value: boolean) => void;
 
 }
 
-const UpdateTransactionEntryCard: React.FC<UpdateTransactionEntryCardProps> = ({ transactionEntryProps, isEditBooleanProps, isSetEditBooleanProps, transactionRelatedUser, users }) => {
+const UpdateTransactionEntryCard: React.FC<UpdateTransactionEntryCardProps> = ({ transactionEntryProps, isEditBooleanProps, isSetEditBooleanProps, transactionRelatedUser, users, setIsRefreshTransactionEntries }) => {
     const { token, userId, userEmail, tokenExpiry, setToken, setUserId, setUserEmail, setTokenExpiry } = useAuth();
     const [mapPosition, setMapPosition] = useState<[number, number]>([14.598202469575067, 120.97252843149849]);
     const [newUsersDetails, setnewUsersDetails] = useState<User[] | null>(users);
@@ -275,6 +276,8 @@ const UpdateTransactionEntryCard: React.FC<UpdateTransactionEntryCardProps> = ({
                 }
             })
 
+            setIsRefreshTransactionEntries(true)
+
         } catch (err) {
             if (axios.isAxiosError(err) && err.response) {
                 console.log(err.response.data.error || 'Transaction creation failed');
@@ -484,7 +487,8 @@ const UpdateTransactionEntryCard: React.FC<UpdateTransactionEntryCardProps> = ({
 
                 <Button
                     size="md"
-                    onClick={handleUpdateSubmit}
+                    // onClick={handleUpdateSubmit}
+                    onClick={() => { handleUpdateSubmit(); handleEditClick(false) }}
                     color="warning"
                     className="p-0 m-0"
                 >
