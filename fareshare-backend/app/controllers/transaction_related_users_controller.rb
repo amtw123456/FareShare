@@ -41,7 +41,7 @@ class TransactionRelatedUsersController < ApplicationController
    # GET /transaction_related_users/by_transaction/:transaction_entry_id
   def transaction_related_user_by_transaction
     transaction_entry_id = params[:transaction_entry_id]
-    @transaction_related_users = TransactionRelatedUser.where(transaction_entry_id: transaction_entry_id)
+    @transaction_related_users = TransactionRelatedUser.where(transaction_entry_id: transaction_entry_id).order(created_at: :asc)
 
     render json: @transaction_related_users
   end
