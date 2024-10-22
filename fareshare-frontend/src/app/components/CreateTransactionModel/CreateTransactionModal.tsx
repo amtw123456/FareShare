@@ -285,7 +285,7 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({ setIsRe
 
     return (
         <>
-            <Button onPress={onOpen} color="primary">
+            <Button className="w-full h-[80px] text-xl" color={"secondary"} onPress={onOpen}>
                 Create Transaction
             </Button>
             <Modal
