@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import { useRouter } from 'next/navigation';
 import { AcmeLogo } from '../components/NavigationBar/AcmeLogo';
 
+import { Spinner } from "@nextui-org/react";
 
 interface User {
     email: string;
@@ -14,6 +15,7 @@ interface User {
 
 const Login = () => {
     const { token, userId, userEmail, tokenExpiry, setToken, setUserId, setUserEmail, setTokenExpiry } = useAuth();
+    const [loading, setLoading] = useState<boolean>(false); // Loading state
     const router = useRouter(); // Initialize router
 
     const [user, setUser] = useState<User>({ email: '', password: '' });
@@ -26,6 +28,7 @@ const Login = () => {
 
     const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault(); // Prevent the default form submission behavior
+        setLoading(true)
         try {
             const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/login`, {
                 user: {  // Wrap the email and password in a user object
@@ -41,9 +44,9 @@ const Login = () => {
             setTokenExpiry(response.data.expires_at);  // Replace with actual expiry time
 
             router.push('/home'); // Change to your profile route
-
         } catch (err) {
             // Handle error responses
+            setLoading(false)
             if (axios.isAxiosError(err) && err.response) {
                 // Check if the error response contains specific information
                 if (err.response.status === 401) { // Assuming 401 is returned for invalid credentials
@@ -111,15 +114,16 @@ const Login = () => {
                                     onChange={handleInputChange}
                                 />
                                 <button
-                                    className="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
+                                    className="mt-5 tracking-wide font-semibold bg-purple-500 text-gray-100 w-full py-4 h-12 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
                                     type="submit"
                                 >
-                                    <svg className="w-6 h-6 -ml-2" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-                                        <circle cx="8.5" cy="7" r="4" />
-                                        <path d="M20 8v6M23 11h-6" />
-                                    </svg>
-                                    <span className="ml-3">Login</span>
+                                    <div className="flex items-center justify-center h-full">
+                                        {loading ? ( // Show loading state
+                                            <Spinner size={'sm'} color={'warning'} />
+                                        ) : (
+                                            <span>Login</span>
+                                        )}
+                                    </div>
                                 </button>
                             </form>
 

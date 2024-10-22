@@ -3,6 +3,9 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
 import { AcmeLogo } from '../components/NavigationBar/AcmeLogo';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '../context/AuthContext';
+import { Spinner } from '@nextui-org/react';
 
 interface User {
     first_name: string;
@@ -13,9 +16,12 @@ interface User {
 }
 
 const Signup = () => {
+    const { token, userId, userEmail, tokenExpiry, setToken, setUserId, setUserEmail, setTokenExpiry } = useAuth();
     const [user, setUser] = useState<User>({ email: '', password: '', first_name: '', last_name: '', user_name: '' });
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState<boolean>(false); // Loading state
+    const router = useRouter(); // Initialize router
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         setUser({ ...user, [e.target.name]: e.target.value });
@@ -23,9 +29,9 @@ const Signup = () => {
 
     const handleRegister = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault(); // Prevent the default form submission behavior
-        console.log(user)
+        setLoading(true)
         try {
-            const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/register`, {
+            const RegisterResponse = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/register`, {
                 user: {  // Wrap the email and password in a user object
                     first_name: user.first_name,
                     last_name: user.last_name,
@@ -35,9 +41,22 @@ const Signup = () => {
                 }
             });
 
-            // Handle successful login here (e.g., save token, redirect user)
-            console.log('Login successful:', response.data);
+            if (RegisterResponse) {
+                const LoginResponse = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/login`, {
+                    user: {  // Wrap the email and password in a user object
+                        email: user.email,
+                        password: user.password,
+                    }
+                });
+                setToken(LoginResponse.data.token);  // Replace with actual token
+                setUserId(LoginResponse.data.user_id);
+                setUserEmail(LoginResponse.data.email);  // Replace with actual email
+                setTokenExpiry(LoginResponse.data.expires_at);  // Replace with actual expiry time
+            }
+
+            router.push('/home'); // Change to your profile route
         } catch (err) {
+            setLoading(false)
             if (axios.isAxiosError(err) && err.response) {
                 setError(err.response.data.error || 'Login failed');
             } else {
@@ -117,13 +136,19 @@ const Signup = () => {
                                 <button
                                     type="submit"
                                     className="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
-                                    <svg className="w-6 h-6 -ml-2" fill="none" stroke="currentColor" strokeWidth="2"
+                                    {/* <svg className="w-6 h-6 -ml-2" fill="none" stroke="currentColor" strokeWidth="2"
                                         strokeLinecap="round" strokeLinejoin="round">
                                         <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
                                         <circle cx="8.5" cy="7" r="4" />
                                         <path d="M20 8v6M23 11h-6" />
-                                    </svg>
-                                    <span className="ml-3">Sign Up</span>
+                                    </svg> */}
+                                    <div className="flex items-center justify-center h-full">
+                                        {loading ? ( // Show loading state
+                                            <Spinner size={'sm'} color={'warning'} />
+                                        ) : (
+                                            <span>Sign up</span>
+                                        )}
+                                    </div>
                                 </button>
                                 {/* Additional UI elements... */}
                             </form>
