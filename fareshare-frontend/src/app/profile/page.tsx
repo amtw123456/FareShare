@@ -51,11 +51,13 @@ const Profile = () => {
     }, [userId]);
 
     useEffect(() => {
+
         fetchTransactionEntries();
 
     }, [isRefreshTransactionEntries]);
 
     useEffect(() => {
+        console.log(transactionEntries)
         setIsRefreshTransactionEntries(false)
     }, [transactionEntries]);
 

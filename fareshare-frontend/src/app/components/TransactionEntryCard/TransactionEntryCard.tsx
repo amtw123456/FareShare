@@ -71,6 +71,7 @@ interface TransactionEntryCardProps {
     showDropDownSettings: boolean;
     setIsRefreshTransactionEntries: (isCreated: boolean) => void; // Prop to track button pressed
 
+
 }
 
 
@@ -80,6 +81,7 @@ const TransactionEntryCard: React.FC<TransactionEntryCardProps> = ({ transaction
     const [usersDetails, setUsersDetails] = useState<User[]>([]);
     const [relatedUsers, setRelatedUsers] = useState<TransactionRelatedUser[]>([]);
     const [transactionCardOwnerName, setTransactionCardOwnerName] = useState<String | null>();
+    const [isRefreshRelatedUser, setIsRefreshRelatedUser] = useState<Boolean>(false)
 
     const [isEdit, setIsEdit] = useState<Boolean>(false);
 
@@ -127,6 +129,8 @@ const TransactionEntryCard: React.FC<TransactionEntryCardProps> = ({ transaction
                     });
 
                 // console.log(response.data)
+                setIsRefreshTransactionEntries(true)
+                setIsRefreshRelatedUser(false)
                 setRelatedUsers(response.data); // Set the related users state
             } catch (error) {
                 console.error("Error fetching related users:", error);
@@ -134,7 +138,7 @@ const TransactionEntryCard: React.FC<TransactionEntryCardProps> = ({ transaction
         };
 
         fetchRelatedUsers();
-    }, [transactionEntry.id]);
+    }, [transactionEntry.id, isRefreshRelatedUser]);
 
     useEffect(() => {
         const userIds = relatedUsers.map(user => {
@@ -294,7 +298,7 @@ const TransactionEntryCard: React.FC<TransactionEntryCardProps> = ({ transaction
                     </div>
                 ) : (
                     <>
-                        <UpdateTransactionEntryCard transactionEntryProps={transactionEntry} isEditBooleanProps={isEdit} isSetEditBooleanProps={setIsEdit} transactionRelatedUser={relatedUsers} users={usersDetails} setIsRefreshTransactionEntries={setIsRefreshTransactionEntries} />
+                        <UpdateTransactionEntryCard transactionEntryProps={transactionEntry} isEditBooleanProps={isEdit} isSetEditBooleanProps={setIsEdit} transactionRelatedUser={relatedUsers} users={usersDetails} setIsRefreshTransactionEntries={setIsRefreshTransactionEntries} setIsRefreshRelatedUser={setIsRefreshRelatedUser} />
                     </>
                 )
             )
