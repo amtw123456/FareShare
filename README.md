@@ -5,7 +5,7 @@ This repository contains a code for a web application for bill splitting
 ### frontend link: https://fare-share-orpin.vercel.app/home
 ### backend link: https://fareshare-oz0v.onrender.com
 
-## if the web application is not working properly the backend server must be offline or is in 502 error check if the backend is working by trying this link https://fareshare-oz0v.onrender.com if you get a hello message it means the backend is currently working properly if not feel free to contact me so I can reset the backend web service
+## if the web application is not working properly the backend server must be offline or is in 502 error check if the backend is working by trying this link https://fareshare-oz0v.onrender.com/hello if you get a hello message it means the backend is currently working properly if not feel free to contact me so I can reset the backend web service
 
 ## Frontend Tech Stack:
 ### Next.js, NextUI, Tailwind (Deployed on Vercel)
