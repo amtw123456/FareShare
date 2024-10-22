@@ -63,11 +63,13 @@ const Profile = () => {
         <div className="flex flex-col min-h-screen bg-gray-100 text-gray-900">
             <NavigationBar />
             <div className='flex justify-center mt-5'>
-                <div className='flex flex-col justify-center items-center'>
+                <div className="flex flex-col justify-center items-center w-full max-w-[600px] mx-auto"> {/* Centered with max width */}
                     <CreateTransactionModal setIsRefreshTransactionEntries={setIsRefreshTransactionEntries} />
-                    <div className='mt-5 space-y-4'>
+                    <div className='w-full mt-5 space-y-4'>
                         {loading ? ( // Show loading state
-                            <CircularProgress color={'secondary'} label="Loading transaction entries" />
+                            <div className='flex justify-center'>
+                                <CircularProgress color={'secondary'} label="Loading transaction entries" />
+                            </div>
                         ) : (
                             transactionEntries.map((transactionEntry) => (
                                 <>
