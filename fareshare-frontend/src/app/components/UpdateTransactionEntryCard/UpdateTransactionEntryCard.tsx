@@ -252,7 +252,9 @@ const UpdateTransactionEntryCard: React.FC<UpdateTransactionEntryCardProps> = ({
                             Authorization: `Bearer ${token}`  // Set the Bearer token in the Authorization header
                         }
                     });
-
+                    setIsRefreshTransactionEntries(true)
+                    handleEditClick(false)
+                    setLoading(false)
                     console.log('Transaction Updated', putTransactionRelatedUsersResponse.data);
                 } catch (error) {
                     console.error('Error updating transaction transaction must not exist:');
@@ -279,9 +281,7 @@ const UpdateTransactionEntryCard: React.FC<UpdateTransactionEntryCardProps> = ({
                 }
             })
 
-            setIsRefreshTransactionEntries(true)
-            handleEditClick(false)
-            setLoading(false)
+
 
         } catch (err) {
             if (axios.isAxiosError(err) && err.response) {
