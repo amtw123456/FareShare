@@ -132,11 +132,12 @@ const TransactionEntryCard: React.FC<TransactionEntryCardProps> = ({ transaction
                 setIsRefreshTransactionEntries(true)
                 setIsRefreshRelatedUser(false)
                 setRelatedUsers(response.data); // Set the related users state
+                setLoading(loading);
             } catch (error) {
                 console.error("Error fetching related users:", error);
             }
         };
-
+        setLoading(true);
         fetchRelatedUsers();
     }, [transactionEntry.id, isRefreshRelatedUser]);
 
