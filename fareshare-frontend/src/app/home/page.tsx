@@ -29,7 +29,7 @@ const Home = () => {
     const { token, userId } = useAuth(); // Use your authentication context
     const [transactionEntries, setTransactionEntries] = useState<TransactionEntry[]>([]); // State to hold transaction entries
     const [loading, setLoading] = useState<boolean>(true); // Loading state
-    const [isTransactionEntryCreated, setIsTransactionEntryCreated] = useState<boolean>(false); // State to track if button is pressed
+    const [isRefreshTransactionEntries, setIsRefreshTransactionEntries] = useState<boolean>(false); // State to track if button is pressed
 
     // Function to fetch transaction entries
     const fetchTransactionEntries = async () => {
@@ -60,10 +60,10 @@ const Home = () => {
     useEffect(() => {
         fetchTransactionEntries();
 
-    }, [isTransactionEntryCreated]);
+    }, [isRefreshTransactionEntries]);
 
     useEffect(() => {
-        setIsTransactionEntryCreated(false)
+        setIsRefreshTransactionEntries(false)
     }, [transactionEntries]);
 
     return (
@@ -71,13 +71,13 @@ const Home = () => {
             <NavigationBar />
             <div className='flex justify-center mt-5'>
                 <div className='flex flex-col justify-center items-center'>
-                    <CreateTransactionModal setIsTransactionEntryCreated={setIsTransactionEntryCreated} />
+                    <CreateTransactionModal setIsRefreshTransactionEntries={setIsRefreshTransactionEntries} />
                     <div className='mt-5 space-y-4'>
                         {loading ? ( // Show loading state
                             <CircularProgress color={'secondary'} label="Loading transaction entries" />
                         ) : (
                             transactionEntries.map((transactionEntry) => (
-                                <TransactionEntryCard key={transactionEntry.id} transactionEntry={transactionEntry} showDropDownSettings={false} />
+                                <TransactionEntryCard key={transactionEntry.id} transactionEntry={transactionEntry} showDropDownSettings={false} setIsRefreshTransactionEntries={setIsRefreshTransactionEntries} />
                             ))
                         )}
                     </div>
